@@ -1,7 +1,7 @@
 # harvest_strategy
 
 * every strategy will analyse the data and recommend `BUY` or `SELL` signals for `stock_x`
-* quantity and order type will be optional and depends upon strategy implementation
+* quantity, order type & other order details will be optional and depends upon strategy implementation
 * every strategy should emit `BUY` and  `SELL` signal  for a stock, in whatever order, also, simutanously updating the status of stock to   its collection to (`open`,`closed`).
 * every strategy call for a stock should follow  from `open` to `close` cycle, until it can make an another call for the same stock, unless explicity allowed by the strategy to make an exception
 

@@ -14,7 +14,7 @@ module.exports = function (options) {
   //seneca.add('role:info,req:part', aliasGet)
 
   return {
-    name: 'strategy'
+    name: 'harvest_strategy'
   }
 
 
