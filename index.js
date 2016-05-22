@@ -11,6 +11,7 @@ module.exports = function (options) {
 
 
   seneca.add('role:strategy,id:fifty_2_wk,cmd:run', fifty_2_wk.run)
+  seneca.add('role:strategy,id:fifty_2_wk,cmd:update_order', fifty_2_wk.update_order)
   //seneca.add('role:info,req:part', aliasGet)
 
   return {
