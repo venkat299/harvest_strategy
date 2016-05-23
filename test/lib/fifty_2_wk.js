@@ -3,9 +3,10 @@ var chai = require('chai'),
 	assert = chai.assert,
 	should = chai.should()
 
-var seneca = require('seneca')()
-seneca.client() // -- integration test
-	//seneca.use('../index.js') // --module test
+// ###### initializing test server ########
+var intialize_server = require('../init_test_server.js')
+
+var seneca;
 
 //=========== mock data ============
 var mock_dt = {
@@ -27,7 +28,7 @@ var data = mock_dt.data.candles[0].reduce(function(result, field, index) {
 
 describe('Strategy:fifty_2_wk', function() {
 
-	before('check test server initialization', check_test_server)
+	before('check test server initialization', intialize)
 
 	describe('#run -> default test', function() {
 		it('should return an obj {success:true,msg:string}', function(done) {
@@ -35,6 +36,7 @@ describe('Strategy:fifty_2_wk', function() {
 				tradingsymbol: 'YESBANK',
 				data: data
 			}, function(err, val) {
+				
 				default_api_test(err, val, done)
 			})
 		})
@@ -115,23 +117,22 @@ var default_api_test = function(err, val, cb) {
 	expect(val).to.be.an('object')
 	expect(val.success).to.be.true
 	expect(val.cb_msg).to.exist
-	//expect(val.cb_msg_obj).to.exist
 	expect(val.curr_track_id).to.exist
 	expect(val.prev_track_id).to.have.property
 	cb()
 }
 
-function check_test_server (done) {
+function intialize(done) {
 
-	seneca.act('role:test_server,cmd:check_status', function(err, val) {
-		if (err) {
-			//console.log(err)
-			done(err)
-		}
-		expect(val).to.be.an('object')
-		expect(val.success).to.be.true
-		done()
+	intialize_server.start().then(function(my_seneca) {
+		//console.log(my_seneca)
+		seneca = my_seneca
+		seneca.client();
+
+		seneca.ready(function() {
+			done()
+		})
 	})
-	
+
 
 }

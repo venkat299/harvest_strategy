@@ -20,6 +20,7 @@ skel:
 	mkdir examples lib test
 	touch index.js
 	npm install mocha chai --save-dev
+	npm install mocha --save-dev
 
 .PHONY: test tap unit jshint skel
 
@@ -27,3 +28,7 @@ git_general_commit:
 	git add --all
 	git commit -m code_changed_to_accomodate_other_api_requirement
 	git push
+
+
+test-coveralls:
+	@NODE_ENV=test istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage
