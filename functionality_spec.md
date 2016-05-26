@@ -3,19 +3,19 @@
 * every strategy will analyse the data and recommend `BUY` or `SELL` signals for `stock_x`
 * quantity, order type & other order details will be optional and depends upon strategy implementation
 * every strategy should emit `BUY` and  `SELL` signal  for a stock, in whatever order, also, simutanously updating the status of stock to   its collection to (`open`,`closed`).
-* every strategy call for a stock should follow  from `open` to `close` cycle, until it can make an another call for the same stock, unless explicity allowed by the strategy to make an exception
+* every strategy call for a stock should follow  from (`pending_open` -> `open` -> `pending_close` -> `close`) cycle, until it can make an another call for the same stock, unless explicity allowed by the strategy to make an exception
 
 
 ###### #run()
 - [x] should accept data (historical/live) i.e. dt
-- [ ] should check for pending/placed order from db (check `register_order()`)
+- [x] should check for pending/placed order from db (check `register_order()`)
 - [ ] should query for more info from `harvest_data` 
-- [ ] should apply logic on `dt` based on point 1 and point 2
+- [x] should apply logic on `dt` based on point 1 and point 2
 - [x] should give `buy` or `sell` signal to `evaluator` after processing data
 
-###### #register_order()
-- [ ] should accept the order placed information from `evaluator` and change the status to `open` || `close`.(order status is sent only when the status is changed to `COMPLETE`)
-- [ ] should save the order information to db under its own collection
+###### #update_order()
+- [x] should accept the order placed information from `evaluator` and change the status from `PENDING_OPEN` || `PENDING_CLOSE` to `OPEN` || `CLOSE`.(order status is sent only when the status is changed to `COMPLETE`)
+- [x] should save the order information to db under its own collection
 
 ###### #watchlist_update()
 - [ ] should add stock to its own watchlist collection

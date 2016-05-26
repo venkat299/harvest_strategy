@@ -1,5 +1,5 @@
 
-var update_order = require('./lib/update_order')
+var update_order = require('./lib/helper/update_order')
 
 // ######## strategy imports #########//
 var fifty_2_wk = require('./lib/fifty_2_wk.js');

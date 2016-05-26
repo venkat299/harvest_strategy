@@ -22,17 +22,167 @@ var mock_dt = {
 var columns = ['timestamp', 'open', 'high', 'low', 'close', 'volume']
 
 var data = mock_dt.data.candles[0].reduce(function(result, field, index) {
-		result[columns[index]] = field
-		return result
-	}, {})
+	result[columns[index]] = field
+	return result
+}, {})
+
+var updated_order_sell_mock = {
+		"entity$": {
+			"name": "order_log"
+		},
+		"strategy_id": "fifty_2_wk",
+		"tradingsymbol": "YESBANK",
+		"status": "COMPLETE",
+		"order_obj": {
+			"strategy_id": "fifty_2_wk",
+			"prev_track_id": null,
+			"track_id": "1463943557324/evaluator/YESBANK",
+			"tradingsymbol": "YESBANK",
+			"exchange": "NSE",
+			"transaction_type": "SELL",
+			"order_type": "MARKET",
+			"quantity": 19,
+			"product": "CNC",
+			"validity": "DAY"
+		},
+		"status_log": [
+			["INIT", 1463943557324],
+			["PLACED", 1463943557326],
+			["COMPLETE", 1463943557347]
+		],
+		"kite_response": [{
+			"order_id": "151220000000000",
+			"tradingsymbol": "YESBANK",
+			"strategy_id": "fifty_2_wk"
+		}, {
+			"order_id": "151220000000000",
+			"exchange_order_id": "511220371736111",
+			"user_id": "AB0012",
+			"status": "COMPLETE",
+			"tradingsymbol": "YESBANK",
+			"exchange": "NSE",
+			"transaction_type": "SELL",
+			"average_price": 100,
+			"price": 100,
+			"quantity": 19,
+			"filled_quantity": 19,
+			"trigger_price": 0,
+			"status_message": "",
+			"order_timestamp": "2015-12-20 15:01:43",
+			"checksum": "5aa3f8e3c8cc41cff362de9f73212e28"
+		}],
+		"order_id": "151220000000000",
+		"id": "j5q7zt",
+		"order_detail": {
+			"order_id": "151220000000000",
+			"exchange_order_id": "511220371736111",
+			"user_id": "AB0012",
+			"status": "COMPLETE",
+			"tradingsymbol": "YESBANK",
+			"exchange": "NSE",
+			"transaction_type": "SELL",
+			"average_price": 140,
+			"price": 140,
+			"quantity": 19,
+			"filled_quantity": 19,
+			"trigger_price": 0,
+			"status_message": "",
+			"order_timestamp": "2015-12-20 15:01:43",
+			"checksum": "5aa3f8e3c8cc41cff362de9f73212e28"
+		}
+	}
+	var updated_order_buy_mock = {
+		"entity$": {
+			"name": "order_log"
+		},
+		"strategy_id": "fifty_2_wk",
+		"tradingsymbol": "YESBANK",
+		"status": "COMPLETE",
+		"order_obj": {
+			"strategy_id": "fifty_2_wk",
+			"prev_track_id": null,
+			"track_id": "1463943557324/evaluator/YESBANK",
+			"tradingsymbol": "YESBANK",
+			"exchange": "NSE",
+			"transaction_type": "BUY",
+			"order_type": "MARKET",
+			"quantity": 19,
+			"product": "CNC",
+			"validity": "DAY"
+		},
+		"status_log": [
+			["INIT", 1463943557324],
+			["PLACED", 1463943557326],
+			["COMPLETE", 1463943557347]
+		],
+		"kite_response": [{
+			"order_id": "151220000000000",
+			"tradingsymbol": "YESBANK",
+			"strategy_id": "fifty_2_wk"
+		}, {
+			"order_id": "151220000000000",
+			"exchange_order_id": "511220371736111",
+			"user_id": "AB0012",
+			"status": "COMPLETE",
+			"tradingsymbol": "YESBANK",
+			"exchange": "NSE",
+			"transaction_type": "BUY",
+			"average_price": 100,
+			"price": 100,
+			"quantity": 19,
+			"filled_quantity": 19,
+			"trigger_price": 0,
+			"status_message": "",
+			"order_timestamp": "2015-12-20 15:01:43",
+			"checksum": "5aa3f8e3c8cc41cff362de9f73212e28"
+		}],
+		"order_id": "151220000000000",
+		"id": "j5q7zt",
+		"order_detail": {
+			"order_id": "151220000000000",
+			"exchange_order_id": "511220371736111",
+			"user_id": "AB0012",
+			"status": "COMPLETE",
+			"tradingsymbol": "YESBANK",
+			"exchange": "NSE",
+			"transaction_type": "BUY",
+			"average_price": 100,
+			"price": 100,
+			"quantity": 19,
+			"filled_quantity": 19,
+			"trigger_price": 0,
+			"status_message": "",
+			"order_timestamp": "2015-12-20 15:01:43",
+			"checksum": "5aa3f8e3c8cc41cff362de9f73212e28"
+		}
+	}
 	//==================================
 
 describe('Strategy:fifty_2_wk', function() {
 
 	before('check test server initialization', intialize)
-
+	describe('#run -> signalling dry call', function() {
+		it('should return msg: no_possible_routing', function(done) {
+			data.close = 140
+			seneca.act('role:strategy,id:fifty_2_wk,cmd:run', {
+				tradingsymbol: 'YESBANK',
+				data: data
+			}, function(err, val) {
+				expect(val.cb_msg).to.match(/no_possible_routing/)
+				expect(val.cb_msg_obj).to.be.an('object')
+				expect(val.cb_msg_obj.transaction_type).to.be.null
+				expect(val.cb_msg_obj.tradingsymbol).to.be.a('string')
+				expect(val.cb_msg_obj.strategy_id).to.be.a('string')
+				expect(val.cb_msg_obj.track_id).to.be.a('string')
+				expect(val.cb_msg_obj.ltp).to.be.a('number')
+				default_api_test(err, val)
+				done()
+			})
+		})
+	})
 	describe('#run -> signalling first buy call', function() {
 		it('should return an obj {success:true,msg:string}\n && buy scenario check if msg info is proper', function(done) {
+			data.close = 125
 			seneca.act('role:strategy,id:fifty_2_wk,cmd:run', {
 				tradingsymbol: 'YESBANK',
 				data: data
@@ -49,16 +199,66 @@ describe('Strategy:fifty_2_wk', function() {
 			})
 		})
 	})
-	describe('#run -> signalling second buy call', function() {
-		it('should return msg with "BUY" call already signalled', function(done) {
+	describe('#run -> signalling second buy call with previous pending buy call', function() {
+		it('should return msg: no_possible_routing', function(done) {
 			data.close = 125
 			seneca.act('role:strategy,id:fifty_2_wk,cmd:run', {
 				tradingsymbol: 'YESBANK',
 				data: data
 			}, function(err, val) {
-				expect(val.cb_msg).to.match(/role:evaluator,cmd:evaluate:order_already_signaled/)
+				expect(val.cb_msg).to.match(/no_possible_routing/)
 				expect(val.cb_msg_obj).to.be.an('object')
-				expect(val.cb_msg_obj.transaction_type).to.match(/BUY/)
+				expect(val.cb_msg_obj.transaction_type).to.be.null
+				expect(val.cb_msg_obj.tradingsymbol).to.be.a('string')
+				expect(val.cb_msg_obj.strategy_id).to.be.a('string')
+				expect(val.cb_msg_obj.track_id).to.be.a('string')
+				expect(val.cb_msg_obj.ltp).to.be.null
+				default_api_test(err, val)
+				done()
+			})
+		})
+	})
+	describe('#run ->  signalling sell call with pending buy call', function() {
+		it('should return msg: no_possible_routing', function(done) {
+			data.close = 140
+			seneca.act('role:strategy,id:fifty_2_wk,cmd:run', {
+				tradingsymbol: 'YESBANK',
+				data: data
+			}, function(err, val) {
+				expect(val.cb_msg).to.match(/no_possible_routing/)
+				expect(val.cb_msg_obj).to.be.an('object')
+				expect(val.cb_msg_obj.transaction_type).to.be.null
+				expect(val.cb_msg_obj.tradingsymbol).to.be.a('string')
+				expect(val.cb_msg_obj.strategy_id).to.be.a('string')
+				expect(val.cb_msg_obj.track_id).to.be.a('string')
+				expect(val.cb_msg_obj.ltp).to.be.null
+				default_api_test(err, val)
+				done()
+			})
+		})
+	})
+	describe('#update_order ->  update signal info to OPEN ', function() {
+			it('should return signal with signal_status as OPEN', function(done) {
+				seneca.act('role:strategy,id:fifty_2_wk,cmd:update_order', updated_order_buy_mock, function(err, val) {
+					expect(val.signal_status).to.match(/OPEN/)
+					expect(val.transaction_type).to.match(/BUY/)
+					expect(val.log.length).to.equal(2)
+					done()
+				})
+			})
+		})
+
+		//================== 
+	describe('#run -> signalling dry sell call ', function() {
+		it('should return msg: no_possible_routing', function(done) {
+			data.close = 120
+			seneca.act('role:strategy,id:fifty_2_wk,cmd:run', {
+				tradingsymbol: 'YESBANK',
+				data: data
+			}, function(err, val) {
+				expect(val.cb_msg).to.match(/no_possible_routing/)
+				expect(val.cb_msg_obj).to.be.an('object')
+				expect(val.cb_msg_obj.transaction_type).to.be.null
 				expect(val.cb_msg_obj.tradingsymbol).to.be.a('string')
 				expect(val.cb_msg_obj.strategy_id).to.be.a('string')
 				expect(val.cb_msg_obj.track_id).to.be.a('string')
@@ -68,37 +268,106 @@ describe('Strategy:fifty_2_wk', function() {
 			})
 		})
 	})
-	describe('#run -> sell scenario check if msg info is proper', function() {
-		it('should return msg with "SELL" call with proper object', function(done) {
+	describe('#run -> signalling first sell call for an open signal', function() {
+		it('should return an obj {success:true,msg:string}\n && buy scenario check if msg info is proper', function(done) {
 			data.close = 140
 			seneca.act('role:strategy,id:fifty_2_wk,cmd:run', {
 				tradingsymbol: 'YESBANK',
 				data: data
 			}, function(err, val) {
-				expect(val.cb_msg).to.match(/role:evaluator,cmd:evaluate,transaction_type:SELL/)
+				expect(val.cb_msg).to.match(/role:evaluator,cmd:evaluate/)
 				expect(val.cb_msg_obj).to.be.an('object')
+				expect(val.cb_msg_obj.transaction_type).to.match(/SELL/)
 				expect(val.cb_msg_obj.tradingsymbol).to.be.a('string')
 				expect(val.cb_msg_obj.strategy_id).to.be.a('string')
 				expect(val.cb_msg_obj.track_id).to.be.a('string')
+				expect(val.cb_msg_obj.ltp).to.be.a('number')
 				default_api_test(err, val)
 				done()
 			})
 		})
 	})
-	describe('#run -> no call scenario', function() {
-		it('should return msg with "Ignore/No" call', function(done) {
-			data.close = 130
+	describe('#run -> signalling second sell call with previous pending sell call', function() {
+		it('should return msg: no_possible_routing', function(done) {
+			data.close = 140
 			seneca.act('role:strategy,id:fifty_2_wk,cmd:run', {
 				tradingsymbol: 'YESBANK',
 				data: data
 			}, function(err, val) {
-				expect(val.cb_msg).to.match(/role:null,cmd:null/)
-				expect(val.cb_msg_obj).to.be.null
+				expect(val.cb_msg).to.match(/no_possible_routing/)
+				expect(val.cb_msg_obj).to.be.an('object')
+				expect(val.cb_msg_obj.transaction_type).to.be.null
+				expect(val.cb_msg_obj.tradingsymbol).to.be.a('string')
+				expect(val.cb_msg_obj.strategy_id).to.be.a('string')
+				expect(val.cb_msg_obj.track_id).to.be.a('string')
+				expect(val.cb_msg_obj.ltp).to.be.null
 				default_api_test(err, val)
 				done()
 			})
 		})
 	})
+	describe('#run ->  signalling buy call with pending sell call', function() {
+		it('should return msg: no_possible_routing', function(done) {
+			data.close = 120
+			seneca.act('role:strategy,id:fifty_2_wk,cmd:run', {
+				tradingsymbol: 'YESBANK',
+				data: data
+			}, function(err, val) {
+				expect(val.cb_msg).to.match(/no_possible_routing/)
+				expect(val.cb_msg_obj).to.be.an('object')
+				expect(val.cb_msg_obj.transaction_type).to.be.null
+				expect(val.cb_msg_obj.tradingsymbol).to.be.a('string')
+				expect(val.cb_msg_obj.strategy_id).to.be.a('string')
+				expect(val.cb_msg_obj.track_id).to.be.a('string')
+				expect(val.cb_msg_obj.ltp).to.be.null
+				default_api_test(err, val)
+				done()
+			})
+		})
+	})
+	describe('#update_order ->  update signal info to CLOSE ', function() {
+			it('should return signal with signal_status as OPEN', function(done) {
+				seneca.act('role:strategy,id:fifty_2_wk,cmd:update_order', updated_order_sell_mock, function(err, val) {
+					expect(val.signal_status).to.match(/CLOSE/)
+					expect(val.transaction_type).to.match(/SELL/)
+					expect(val.log.length).to.equal(4)
+					done()
+				})
+			})
+		})
+		// describe('#run ->  signalling second sell call', function() {
+		// 	it('should return msg with "SELL" call with proper object', function(done) {
+		// 		data.close = 140
+		// 		seneca.act('role:strategy,id:fifty_2_wk,cmd:run', {
+		// 			tradingsymbol: 'YESBANK',
+		// 			data: data
+		// 		}, function(err, val) {
+		// 			expect(val.cb_msg).to.match(/role:evaluator,cmd:evaluate\/order_already_signaled/)
+		// 			expect(val.cb_msg_obj).to.be.an('object')
+		// 			expect(val.cb_msg_obj.transaction_type).to.match(/SELL/)
+		// 			expect(val.cb_msg_obj.tradingsymbol).to.be.a('string')
+		// 			expect(val.cb_msg_obj.strategy_id).to.be.a('string')
+		// 			expect(val.cb_msg_obj.track_id).to.be.a('string')
+		// 			expect(val.cb_msg_obj.ltp).to.be.a('number')
+		// 			default_api_test(err, val)
+		// 			done()
+		// 		})
+		// 	})
+		// })
+		// describe('#run -> no call scenario', function() {
+		// 	it('should return msg with "Ignore/No" call', function(done) {
+		// 		data.close = 130
+		// 		seneca.act('role:strategy,id:fifty_2_wk,cmd:run', {
+		// 			tradingsymbol: 'YESBANK',
+		// 			data: data
+		// 		}, function(err, val) {
+		// 			expect(val.cb_msg).to.match(/role:null,cmd:null/)
+		// 			expect(val.cb_msg_obj).to.be.null
+		// 			default_api_test(err, val)
+		// 			done()
+		// 		})
+		// 	})
+		// })
 })
 
 var default_api_test = function(err, val, cb) {
