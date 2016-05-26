@@ -1,7 +1,8 @@
 var chai = require('chai'),
 	expect = chai.expect,
 	assert = chai.assert,
-	should = chai.should()
+	should = chai.should();
+var Promise = require('bluebird')
 
 // ###### initializing test server ########
 var intialize_server = require('../init_test_server.js')
@@ -30,55 +31,40 @@ describe('Strategy:fifty_2_wk', function() {
 
 	before('check test server initialization', intialize)
 
-	describe('#run -> default test', function() {
-		it('should return an obj {success:true,msg:string}', function(done) {
+	describe('#run -> signalling first buy call', function() {
+		it('should return an obj {success:true,msg:string}\n && buy scenario check if msg info is proper', function(done) {
 			seneca.act('role:strategy,id:fifty_2_wk,cmd:run', {
 				tradingsymbol: 'YESBANK',
 				data: data
 			}, function(err, val) {
-				
-				default_api_test(err, val, done)
-			})
-		})
-	})
-	describe('#run -> buy scenario', function() {
-		it('should return msg with "BUY" call', function(done) {
-			data.close = 125
-			seneca.act('role:strategy,id:fifty_2_wk,cmd:run', {
-				tradingsymbol: 'YESBANK',
-				data: data
-			}, function(err, val) {
-				expect(val.cb_msg).to.match(/role:evaluator,cmd:buy/)
+				expect(val.cb_msg).to.match(/role:evaluator,cmd:evaluate/)
 				expect(val.cb_msg_obj).to.be.an('object')
-				default_api_test(err, val, done)
-			})
-		})
-	})
-	describe('#run -> buy scenario check if msg info is proper', function() {
-		it('should return msg with "BUY" call with proper object', function(done) {
-			data.close = 125
-			seneca.act('role:strategy,id:fifty_2_wk,cmd:run', {
-				tradingsymbol: 'YESBANK',
-				data: data
-			}, function(err, val) {
+				expect(val.cb_msg_obj.transaction_type).to.match(/BUY/)
 				expect(val.cb_msg_obj.tradingsymbol).to.be.a('string')
 				expect(val.cb_msg_obj.strategy_id).to.be.a('string')
 				expect(val.cb_msg_obj.track_id).to.be.a('string')
 				expect(val.cb_msg_obj.ltp).to.be.a('number')
-				default_api_test(err, val, done)
+				default_api_test(err, val)
+				done()
 			})
 		})
 	})
-	describe('#run -> sell scenario', function() {
-		it('should return msg with "SELL" call', function(done) {
-			data.close = 140
+	describe('#run -> signalling second buy call', function() {
+		it('should return msg with "BUY" call already signalled', function(done) {
+			data.close = 125
 			seneca.act('role:strategy,id:fifty_2_wk,cmd:run', {
 				tradingsymbol: 'YESBANK',
 				data: data
 			}, function(err, val) {
-				expect(val.cb_msg).to.match(/role:evaluator,cmd:sell/)
+				expect(val.cb_msg).to.match(/role:evaluator,cmd:evaluate:order_already_signaled/)
 				expect(val.cb_msg_obj).to.be.an('object')
-				default_api_test(err, val, done)
+				expect(val.cb_msg_obj.transaction_type).to.match(/BUY/)
+				expect(val.cb_msg_obj.tradingsymbol).to.be.a('string')
+				expect(val.cb_msg_obj.strategy_id).to.be.a('string')
+				expect(val.cb_msg_obj.track_id).to.be.a('string')
+				expect(val.cb_msg_obj.ltp).to.be.a('number')
+				default_api_test(err, val)
+				done()
 			})
 		})
 	})
@@ -89,10 +75,13 @@ describe('Strategy:fifty_2_wk', function() {
 				tradingsymbol: 'YESBANK',
 				data: data
 			}, function(err, val) {
+				expect(val.cb_msg).to.match(/role:evaluator,cmd:evaluate,transaction_type:SELL/)
+				expect(val.cb_msg_obj).to.be.an('object')
 				expect(val.cb_msg_obj.tradingsymbol).to.be.a('string')
 				expect(val.cb_msg_obj.strategy_id).to.be.a('string')
 				expect(val.cb_msg_obj.track_id).to.be.a('string')
-				default_api_test(err, val, done)
+				default_api_test(err, val)
+				done()
 			})
 		})
 	})
@@ -105,7 +94,8 @@ describe('Strategy:fifty_2_wk', function() {
 			}, function(err, val) {
 				expect(val.cb_msg).to.match(/role:null,cmd:null/)
 				expect(val.cb_msg_obj).to.be.null
-				default_api_test(err, val, done)
+				default_api_test(err, val)
+				done()
 			})
 		})
 	})
@@ -119,7 +109,6 @@ var default_api_test = function(err, val, cb) {
 	expect(val.cb_msg).to.exist
 	expect(val.curr_track_id).to.exist
 	expect(val.prev_track_id).to.have.property
-	cb()
 }
 
 function intialize(done) {
@@ -129,10 +118,37 @@ function intialize(done) {
 		seneca = my_seneca
 		seneca.client();
 
+		var entity_1 = seneca.make$('strategy', {
+			strategy_id: 'fifty_2_wk',
+			budget: 10000,
+			spent: 2000,
+			equity_ceil: 0.2
+		})
+		var entity_1_save$ = Promise.promisify(entity_1.save$, {
+			context: entity_1
+		})
+		var entity_2 = seneca.make$('strategy_stock', {
+			strategy_id: 'fifty_2_wk',
+			tradingsymbol: 'YESBANK',
+			stock_ceil: 0.4,
+			nrr: 0.8
+		})
+		var entity_2_save$ = Promise.promisify(entity_2.save$, {
+			context: entity_2
+		})
+
+
 		seneca.ready(function() {
-			done()
+			Promise.all([
+				entity_1_save$(),
+				entity_2_save$()
+			]).then(function(res) {
+				done()
+			})
+
 		})
 	})
+
 
 
 }

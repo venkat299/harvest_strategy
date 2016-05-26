@@ -3,7 +3,6 @@ var fs = require('fs')
 var mkdirp = require('mkdirp')
 
 var seneca = require('seneca')();
-seneca.use('entity')
 var Promise = require('bluebird')
 	//Promise.promisify(seneca.make$,{context:seneca})
 	//Promise.promisify(seneca.list$,{context:seneca})
@@ -25,24 +24,23 @@ var harvest_evaluator = require('harvest_evaluator');
 var harvest_executor = require('harvest_executor');
 
 
-// ###### current service being tested ########
-seneca.use('../index.js')
-
-
 seneca.use(harvest_data)
 //seneca.use(harvest_strategy)
 seneca.use(harvest_evaluator)
 seneca.use(harvest_executor)
 
-
-
+// ###### current service being tested ########
+seneca.use('../index.js')
 
 // ###### testing module ########
 function start(cb) {
 	// ###### resetting db  ########
 	reset_db()
 
+
+
 	// ###### adding test db  ########
+	seneca.use('entity')
 	seneca.use(test_db_name, test_db_config)
 
 	// ###### promisifying method act  ########
