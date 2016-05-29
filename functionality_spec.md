@@ -9,7 +9,7 @@
 ###### #run()
 - [x] should accept data (historical/live) i.e. dt
 - [x] should check for pending/placed order from db (check `register_order()`)
-- [ ] should query for more info from `harvest_data` 
+- [x] should query for more info from `harvest_data` 
 - [x] should apply logic on `dt` based on point 1 and point 2
 - [x] should give `buy` or `sell` signal to `evaluator` after processing data
 
