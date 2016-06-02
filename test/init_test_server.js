@@ -2,19 +2,25 @@ var path = require('path')
 var fs = require('fs')
 var mkdirp = require('mkdirp')
 
+var config = require('../config.json')
+// ======= change db here =========
+var test_db = config.test.current_db
+// ================================
+var test_db_name = config.test[test_db].db_type
+var test_db_config = config.test[test_db].db_config
+
+// ###### testing module ########
+function start(cb) {
+
 var seneca = require('seneca')();
 var Promise = require('bluebird')
 	//Promise.promisify(seneca.make$,{context:seneca})
 	//Promise.promisify(seneca.list$,{context:seneca})
 
 
-var config = require('../config.json')
 
-// ======= change db here =========
-var test_db = config.test.current_db
-// ================================
-var test_db_name = config.test[test_db].db_type
-var test_db_config = config.test[test_db].db_config
+
+
 
 
 // ###### service needed for testing  ########
@@ -32,16 +38,15 @@ seneca.use(harvest_executor)
 // ###### current service being tested ########
 seneca.use('../index.js')
 
-// ###### testing module ########
-function start(cb) {
 	// ###### resetting db  ########
 	reset_db()
 
 
 
 	// ###### adding test db  ########
-	seneca.use('entity')
-	seneca.use(test_db_name, test_db_config)
+	try{seneca.use('entity')
+	seneca.use(test_db_name, test_db_config)}
+	catch(err){ console.log(err)}
 
 	// ###### promisifying method act  ########
 	Promise.promisify(seneca.act,{context:seneca})
@@ -58,7 +63,7 @@ function start(cb) {
 			})
 			seneca.listen()
 			resolve(seneca)
-			console.log('test server listening')
+			//console.log('test server listening')
 		})
 	})
 }
@@ -68,12 +73,12 @@ var reset_db = function() {
 	// ###### for mongo db  ########
 	if (test_db === 'mongo') {
 		// drop mongo db
-		console.log('clearing mongodb database')
+		//console.log('clearing mongodb database')
 	}
 	// ###### for level db and json-file db  ########
 	else {
 		// ######### removing db directories #########
-		console.log('clearing db files')
+		//console.log('clearing db files')
 		rmDir(test_db_config.folder, false)
 			// ######### creating empty db directory #########
 		var mkdirp = require('mkdirp');

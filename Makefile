@@ -32,3 +32,9 @@ git_general_commit:
 
 test-coveralls:
 	@NODE_ENV=test istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- --recursive -R spec && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage
+
+cover_local:
+		istanbul cover _mocha -- --recursive  -R spec
+
+test_local:
+		clear && printf '\e[3J'; mocha  --recursive -R  "progress"

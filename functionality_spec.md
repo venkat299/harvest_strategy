@@ -18,9 +18,14 @@
 - [x] should save the order information to db under its own collection
 
 ###### #watchlist_update()
-- [ ] should add stock to its own watchlist collection
-- [ ] should remove stock from its watchlist
-- [ ] should update its db collection accordingly
+- [x] should add stock to its own watchlist collection
+- [x] should remove stock from its watchlist(make status inactive)
+- `watchlist` entity struct
+	* strategy_id:string
+	* tradingsymbol:string
+	* status:['ACTIVE','INACTIVE']
+	* routine_run_dt:unix_time
+
 
 
 ###### #routine()
