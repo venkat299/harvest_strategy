@@ -37,4 +37,4 @@ cover_local:
 		istanbul cover _mocha -- --recursive  -R spec
 
 test_local:
-		clear && printf '\e[3J'; mocha  --recursive -R  "progress"
+		clear && printf '\e[3J'; mocha  --recursive -R  "spec"
