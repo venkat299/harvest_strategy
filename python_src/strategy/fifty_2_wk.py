@@ -4,7 +4,7 @@ import pandas as pd
 # if __name__ == "__main__":
 # logging.basicConfig(level=logging.DEBUG, filename="logfile", filemode="a+",
 #                        format="%(asctime)-15s %(levelname)-8s %(message)s")
-logging.basicConfig(level=logging.DEBUG, filename="logfile",filemode="w",
+logging.basicConfig(level=logging.DEBUG, filename="logfile.log",filemode="w",
                         format="%(message)s")
 
 
