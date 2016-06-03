@@ -3,40 +3,36 @@ var fs = require('fs')
 var mkdirp = require('mkdirp')
 
 var config = require('../config.json')
-// ======= change db here =========
+	// ======= change db here =========
 var test_db = config.test.current_db
-// ================================
+	// ================================
 var test_db_name = config.test[test_db].db_type
 var test_db_config = config.test[test_db].db_config
 
 // ###### testing module ########
 function start(cb) {
 
-var seneca = require('seneca')();
-var Promise = require('bluebird')
-	//Promise.promisify(seneca.make$,{context:seneca})
-	//Promise.promisify(seneca.list$,{context:seneca})
+	var seneca = require('seneca')();
+	var Promise = require('bluebird')
+		//Promise.promisify(seneca.make$,{context:seneca})
+		//Promise.promisify(seneca.list$,{context:seneca})
 
 
 
+	// ###### service needed for testing  ########
+	//var harvest_strategy = require('harvest_strategy');
+	var harvest_data = require('harvest_data');
+	var harvest_evaluator = require('harvest_evaluator');
+	var harvest_executor = require('harvest_executor');
 
 
+	seneca.use(harvest_data)
+		//seneca.use(harvest_strategy)
+	seneca.use(harvest_evaluator)
+	seneca.use(harvest_executor)
 
-
-// ###### service needed for testing  ########
-//var harvest_strategy = require('harvest_strategy');
-var harvest_data = require('harvest_data');
-var harvest_evaluator = require('harvest_evaluator');
-var harvest_executor = require('harvest_executor');
-
-
-seneca.use(harvest_data)
-//seneca.use(harvest_strategy)
-seneca.use(harvest_evaluator)
-seneca.use(harvest_executor)
-
-// ###### current service being tested ########
-seneca.use('../index.js')
+	// ###### current service being tested ########
+	seneca.use('../index.js')
 
 	// ###### resetting db  ########
 	reset_db()
@@ -44,12 +40,17 @@ seneca.use('../index.js')
 
 
 	// ###### adding test db  ########
-	try{seneca.use('entity')
-	seneca.use(test_db_name, test_db_config)}
-	catch(err){ console.log(err)}
+	try {
+		seneca.use('entity')
+		seneca.use(test_db_name, test_db_config)
+	} catch (err) {
+		console.log(err)
+	}
 
 	// ###### promisifying method act  ########
-	Promise.promisify(seneca.act,{context:seneca})
+	Promise.promisify(seneca.act, {
+		context: seneca
+	})
 
 	// ###### returning a promise that db is configured  ########
 	return new Promise(function(resolve, reject) {
@@ -61,9 +62,12 @@ seneca.use('../index.js')
 					server_type: 'test'
 				})
 			})
-			seneca.listen()
+			seneca.listen({
+				host: 'localhost',
+				port: '8080'
+			})
 			resolve(seneca)
-			//console.log('test server listening')
+				//console.log('test server listening')
 		})
 	})
 }

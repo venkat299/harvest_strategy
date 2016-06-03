@@ -8,9 +8,10 @@
     "test": "test"
   },
   "dependencies": {
+    "bluebird": "^3.3.5",
+    "python-shell": "^0.4.0",
     "seneca": "^2.0.1",
-    "seneca-entity": "0.0.1",
-    "bluebird": "^3.3.5"
+    "seneca-entity": "0.0.1"
   },
   "devDependencies": {
     "harvest_data": "git+https://github.com/venkat299/harvest_data.git",

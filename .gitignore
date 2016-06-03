@@ -3,3 +3,4 @@ examples
 test/test_db/
 coverage
 .DS_Store
+*.log
