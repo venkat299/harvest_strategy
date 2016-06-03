@@ -1,8 +1,12 @@
 language: node_js
 node_js:
   - "node"
+python:
+  - "2.7"
 script: make test-coveralls
 sudo: false
+before_install:
+  - pip install --user quandl
 addons:
     code_climate:
         repo_token: 585c30a84160ba9b2e47bb0ef1d5eec90dc9537783787a5a495979957f03ca9b

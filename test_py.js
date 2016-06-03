@@ -34,7 +34,9 @@ data.strategy_stock = {
 			stock_ceil: 0.4,
 			nrr: 0.8,
 			profit_margin: 1.1,
-			buy_price_threshold: 1.25
+			buy_price_threshold: 1.25,
+			prev_buy_price:0,
+			prev_sell_price:0
 		}
 
 var count = 0;
