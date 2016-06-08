@@ -327,17 +327,17 @@ describe('Strategy:fifty_2_wk', function() {
 			})
 		})
 
-	// })
-	// describe('Strategy #update_order -> sell scenario', function() {
-	// 	it('update signal info to CLOSE -> should return signal with signal_status as OPEN', function(done) {
-	// 		seneca.act('role:strategy,id:fifty_2_wk,cmd:update_order', updated_order_sell_mock, function(err, val) {
-	// if(err) done(err)			
-	// expect(val.signal_status).to.match(/CLOSE/)
-	// 			expect(val.transaction_type).to.match(/SELL/)
-	// 			expect(val.log.length).to.equal(4)
-	// 			done()
-	// 		})
-	// 	})
+	})
+	describe('Strategy #update_order -> sell scenario', function() {
+		it('update signal info to CLOSE -> should return signal with signal_status as OPEN', function(done) {
+			seneca.act('role:strategy,id:fifty_2_wk,cmd:update_order', updated_order_sell_mock, function(err, val) {
+	if(err) done(err)			
+	expect(val.signal_status).to.match(/CLOSE/)
+				expect(val.transaction_type).to.match(/SELL/)
+				expect(val.log.length).to.equal(4)
+				done()
+			})
+		})
 	 	})
 })
 
@@ -404,5 +404,6 @@ function intialize(done) {
 
 function close_seneca(done) {
 	//console.log('closing seneca instance')
+	//quandl.get("NSE/YESBANK", authtoken="1CzVT1zp5yzCQjQNq8yR", start_date="2013-06-08")
 	seneca.close(done)
 }

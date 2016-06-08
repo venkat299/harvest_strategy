@@ -15,14 +15,15 @@ in_data = json.loads(lines[len(lines)-1])
 def check (curr):
 	#logging.info(curr)
 	stk = curr['strategy_stock']
-	
-	data = quandl.Dataset('NSE/YESBANK').data(params={'limit':52,'rows':52,'order':'desc'})
-	data_set  = data.to_pandas()
+	####### data retrieval part ###########
+	#-> data = quandl.Dataset('NSE/YESBANK').data(params={'limit':52,'rows':52,'order':'desc'})
+	#-> data_set  = data.to_pandas()
 	#logging.info(data_set.columns)
+	####### data retrieval part end ###########
 
-	cl_col = data_set['Close']
-	cl_52_max = cl_col.max()
-	cl_52_min = cl_col.min()
+	#-> cl_col = data_set['Close']
+	cl_52_max = 1049.9 ## cl_col.max()
+	cl_52_min = 799.5 ## cl_col.min()
 	prev_buy_price = stk['prev_buy_price']
 
 	#logging.info('close max :%s\nclose min :%s',cl_52_max,cl_52_min)

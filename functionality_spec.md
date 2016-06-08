@@ -16,7 +16,7 @@
 ###### #update_order()
 - [x] should accept the order placed information from `evaluator` and change the status from `PENDING_OPEN` || `PENDING_CLOSE` to `OPEN` || `CLOSE`.(order status is sent only when the status is changed to `COMPLETE`)
 - [x] should save the order information to db under its own collection
-
+- [x] should also update  `stock_update` collection's field `last_buy_price || last_sell_price`
 ###### #watchlist_update()
 - [x] should add stock to its own watchlist collection
 - [x] should remove stock from its watchlist(make status inactive)
