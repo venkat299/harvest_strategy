@@ -37,4 +37,5 @@ cover_local:
 		istanbul cover _mocha -- --recursive  -R spec
 
 test_local:
+		export PYTHONPATH="/opt/local/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages"
 		clear && printf '\e[3J'; mocha  --recursive -R  "spec"

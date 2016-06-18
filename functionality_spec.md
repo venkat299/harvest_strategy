@@ -24,7 +24,9 @@
 	* strategy_id:string
 	* tradingsymbol:string
 	* status:['ACTIVE','INACTIVE']
-	* routine_run_dt:unix_time
+	* update_time:unix_time
+	* ror:float
+	* std:float	
 
 
 
