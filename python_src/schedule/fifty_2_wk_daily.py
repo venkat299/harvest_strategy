@@ -6,7 +6,16 @@ import math
 logging.basicConfig(level=logging.DEBUG, filename="logfile.log",filemode="w",format="%(message)s")
 
 
-dt = pd.read_csv('./python_src/sample_data/NSE-YESBANK.csv')
+opt={}
+
+# simple JSON echo script
+lines = sys.stdin.readlines()
+#logging.info('input lines:%s data:%s',len(lines),lines)
+opt = json.loads(lines[len(lines)-1])
+
+logging.info(opt)
+logging.info(opt['python_dir'])
+dt = pd.read_csv('server/python_data/NSE-'+opt['tradingsymbol']+'.csv')
 
 dt_length = len(dt)
 
@@ -78,7 +87,8 @@ logging.info(op_cl_periods)
 
 
 df_std = pd.DataFrame(fixed_returns)
-returns_std = df_std.std()/df_std.mean()
+returns_std = df_std.std()#/df_std.mean()
+returns_mean = df_std.mean()
 
 # def do_full_simulation ():
 
@@ -96,6 +106,7 @@ dummy_result = {}
 dummy_result['success'] = True
 dummy_result['ror'] = round(variable_limit_profit/fixed_limit,4)
 dummy_result['returns_std'] = round(returns_std,4)
+dummy_result['returns_mean'] = round(returns_mean)
 dummy_result['cycle_periods']=op_cl_periods
 dummy_result['fixed_returns']=fixed_returns
 dummy_result['strategy_id']='fifty_2_wk'

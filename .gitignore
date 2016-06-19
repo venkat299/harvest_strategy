@@ -4,3 +4,4 @@ test/test_db/
 coverage
 .DS_Store
 *.log
+server/python_data/*.csv

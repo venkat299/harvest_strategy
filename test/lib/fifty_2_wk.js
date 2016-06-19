@@ -162,81 +162,81 @@ describe('Strategy:fifty_2_wk', function() {
 
 	before('check test server initialization', intialize)
 	after('close server', close_seneca)
-		describe('Strategy #run -> buy scenario', function() {
-			it('signalling dry call -> should return msg: no_possible_routing', function(done) {
-				this.timeout(5000);
-				data.close = 1200 //140
-				seneca.act('role:strategy,id:fifty_2_wk,cmd:run', {
-					tradingsymbol: 'YESBANK',
-					data: data
-				}, function(err, val) {
-					if (err) done(err)
-					expect(val.cb_msg).to.match(/no_possible_routing/)
-					expect(val.cb_msg_obj).to.be.an('object')
-					expect(val.cb_msg_obj.transaction_type).to.be.null
-					expect(val.cb_msg_obj.tradingsymbol).to.be.a('string')
-					expect(val.cb_msg_obj.strategy_id).to.be.a('string')
-					expect(val.cb_msg_obj.track_id).to.be.a('string')
-					expect(val.cb_msg_obj.ltp).to.be.a('number')
-					default_api_test(err, val)
-					done()
-				})
+	describe('Strategy #run -> buy scenario', function() {
+		it('signalling dry call -> should return msg: no_possible_routing', function(done) {
+			this.timeout(5000);
+			data.close = 1200 //140
+			seneca.act('role:strategy,id:fifty_2_wk,cmd:run', {
+				tradingsymbol: 'YESBANK',
+				data: data
+			}, function(err, val) {
+				if (err) done(err)
+				expect(val.cb_msg).to.match(/no_possible_routing/)
+				expect(val.cb_msg_obj).to.be.an('object')
+				expect(val.cb_msg_obj.transaction_type).to.be.null
+				expect(val.cb_msg_obj.tradingsymbol).to.be.a('string')
+				expect(val.cb_msg_obj.strategy_id).to.be.a('string')
+				expect(val.cb_msg_obj.track_id).to.be.a('string')
+				expect(val.cb_msg_obj.ltp).to.be.a('number')
+				default_api_test(err, val)
+				done()
 			})
-			it('signalling first buy call -> should return an obj {success:true,msg:string}\n && buy scenario check if msg info is proper', function(done) {
-				this.timeout(5000);
-				data.close = 990 //125
-				seneca.act('role:strategy,id:fifty_2_wk,cmd:run', {
-					tradingsymbol: 'YESBANK',
-					data: data
-				}, function(err, val) {
-					if (err) done(err)
-					expect(val.cb_msg).to.match(/role:evaluator,cmd:evaluate/)
-					expect(val.cb_msg_obj).to.be.an('object')
-					expect(val.cb_msg_obj.transaction_type).to.match(/BUY/)
-					expect(val.cb_msg_obj.tradingsymbol).to.be.a('string')
-					expect(val.cb_msg_obj.strategy_id).to.be.a('string')
-					expect(val.cb_msg_obj.track_id).to.be.a('string')
-					expect(val.cb_msg_obj.ltp).to.be.a('number')
-					default_api_test(err, val)
-					done()
-				})
+		})
+		it('signalling first buy call -> should return an obj {success:true,msg:string}\n && buy scenario check if msg info is proper', function(done) {
+			this.timeout(5000);
+			data.close = 990 //125
+			seneca.act('role:strategy,id:fifty_2_wk,cmd:run', {
+				tradingsymbol: 'YESBANK',
+				data: data
+			}, function(err, val) {
+				if (err) done(err)
+				expect(val.cb_msg).to.match(/role:evaluator,cmd:evaluate/)
+				expect(val.cb_msg_obj).to.be.an('object')
+				expect(val.cb_msg_obj.transaction_type).to.match(/BUY/)
+				expect(val.cb_msg_obj.tradingsymbol).to.be.a('string')
+				expect(val.cb_msg_obj.strategy_id).to.be.a('string')
+				expect(val.cb_msg_obj.track_id).to.be.a('string')
+				expect(val.cb_msg_obj.ltp).to.be.a('number')
+				default_api_test(err, val)
+				done()
 			})
-			it('signalling second buy call with previous pending buy call -> should return msg: no_possible_routing', function(done) {
-				data.close = 990 //125
-				seneca.act('role:strategy,id:fifty_2_wk,cmd:run', {
-					tradingsymbol: 'YESBANK',
-					data: data
-				}, function(err, val) {
-					if (err) done(err)
-					expect(val.cb_msg).to.match(/no_possible_routing/)
-					expect(val.cb_msg_obj).to.be.an('object')
-					expect(val.cb_msg_obj.transaction_type).to.be.null
-					expect(val.cb_msg_obj.tradingsymbol).to.be.a('string')
-					expect(val.cb_msg_obj.strategy_id).to.be.a('string')
-					expect(val.cb_msg_obj.track_id).to.be.a('string')
-					expect(val.cb_msg_obj.ltp).to.be.a('number')
-					default_api_test(err, val)
-					done()
-				})
+		})
+		it('signalling second buy call with previous pending buy call -> should return msg: no_possible_routing', function(done) {
+			data.close = 990 //125
+			seneca.act('role:strategy,id:fifty_2_wk,cmd:run', {
+				tradingsymbol: 'YESBANK',
+				data: data
+			}, function(err, val) {
+				if (err) done(err)
+				expect(val.cb_msg).to.match(/no_possible_routing/)
+				expect(val.cb_msg_obj).to.be.an('object')
+				expect(val.cb_msg_obj.transaction_type).to.be.null
+				expect(val.cb_msg_obj.tradingsymbol).to.be.a('string')
+				expect(val.cb_msg_obj.strategy_id).to.be.a('string')
+				expect(val.cb_msg_obj.track_id).to.be.a('string')
+				expect(val.cb_msg_obj.ltp).to.be.a('number')
+				default_api_test(err, val)
+				done()
 			})
-			it('signalling sell call with pending buy call -> should return msg: no_possible_routing', function(done) {
-				data.close = 1100 //140
-				seneca.act('role:strategy,id:fifty_2_wk,cmd:run', {
-					tradingsymbol: 'YESBANK',
-					data: data
-				}, function(err, val) {
-					if (err) done(err)
-					expect(val.cb_msg).to.match(/no_possible_routing/)
-					expect(val.cb_msg_obj).to.be.an('object')
-					expect(val.cb_msg_obj.transaction_type).to.be.null
-					expect(val.cb_msg_obj.tradingsymbol).to.be.a('string')
-					expect(val.cb_msg_obj.strategy_id).to.be.a('string')
-					expect(val.cb_msg_obj.track_id).to.be.a('string')
-					expect(val.cb_msg_obj.ltp).to.be.a('number')
-					default_api_test(err, val)
-					done()
-				})
+		})
+		it('signalling sell call with pending buy call -> should return msg: no_possible_routing', function(done) {
+			data.close = 1100 //140
+			seneca.act('role:strategy,id:fifty_2_wk,cmd:run', {
+				tradingsymbol: 'YESBANK',
+				data: data
+			}, function(err, val) {
+				if (err) done(err)
+				expect(val.cb_msg).to.match(/no_possible_routing/)
+				expect(val.cb_msg_obj).to.be.an('object')
+				expect(val.cb_msg_obj.transaction_type).to.be.null
+				expect(val.cb_msg_obj.tradingsymbol).to.be.a('string')
+				expect(val.cb_msg_obj.strategy_id).to.be.a('string')
+				expect(val.cb_msg_obj.track_id).to.be.a('string')
+				expect(val.cb_msg_obj.ltp).to.be.a('number')
+				default_api_test(err, val)
+				done()
 			})
+		})
 
 	})
 	describe('Strategy #update_order -> buy scenario', function() {
@@ -339,12 +339,23 @@ describe('Strategy:fifty_2_wk', function() {
 			})
 		})
 	})
+	describe('Strategy #monthly_eod_update -> run monthly_eod_update routine', function() {
+		it('should run monthly for the given stock -> should return {success:true}', function(done) {
+			this.timeout(5000);
+			seneca.act('role:routine,cmd:monthly_eod_update',  {
+				stock_list:['YESBANK']
+			}, function(err, val) {
+				if (err) done(err)
+				expect(val.success).to.be.true
+				done()
+			})
+		})
+	})
 	describe('Strategy #run_routine -> run daily routine', function() {
 		it('should run daily for the given strategy -> should return {success:true}', function(done) {
-			seneca.act('role:strategy,cmd:run_routine,schedule:daily', {
-				query: {
-					tradingsymbol: 'YESBANK'
-				}
+			seneca.act('role:routine,cmd:run_routine',  {
+				strategy_id: 'fifty_2_wk',
+				tradingsymbol: 'YESBANK'
 			}, function(err, val) {
 				if (err) done(err)
 				expect(val.success).to.be.true
@@ -403,8 +414,8 @@ function intialize(done) {
 		var entity_3 = seneca.make$('watchlist', {
 			strategy_id: 'fifty_2_wk',
 			tradingsymbol: 'YESBANK',
-			status:'ACTIVE',
-			update_time:null
+			status: 'ACTIVE',
+			update_time: null
 		})
 		var entity_3_save$ = Promise.promisify(entity_3.save$, {
 			context: entity_3
