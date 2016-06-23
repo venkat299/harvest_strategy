@@ -400,6 +400,7 @@ function intialize(done) {
 		var entity_2 = seneca.make$('strategy_stock', {
 			strategy_id: 'fifty_2_wk',
 			tradingsymbol: 'YESBANK',
+			status:'ACTIVE',
 			stock_ceil: 0.4,
 			nrr: 0.8,
 			profit_margin: 1.1,
