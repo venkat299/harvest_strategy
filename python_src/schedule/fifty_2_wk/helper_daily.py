@@ -7,7 +7,7 @@ import logging
 import pandas as pd
 import numpy as np
 import math
-from scipy import stats
+#from scipy import stats
 
 
 def strategy_config(opt):
