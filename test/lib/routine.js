@@ -6,7 +6,7 @@ var Promise = require('bluebird')
 	// ###### initializing test server ########
 var intialize_server = require('../init_test_server.js')
 var seneca;
-//=========== mock data ============
+//=========== mock strategy_config ============
 var mock_dt = {
 		strategy_id: 'fifty_2_wk',
 		await:true 
@@ -19,7 +19,7 @@ var mock_dt_web = {
 		//otherwise web request will have to wait for long time
 	}
 	//==================================
-describe('Strategy_stock module', function() {
+describe('Routine module', function() {
 	before('check test server initialization', intialize)
 	after('close server', close_seneca)
 		//==========`=== tests ==============
@@ -36,14 +36,14 @@ describe('Strategy_stock module', function() {
 			seneca.act('role:routine,cmd:run_routine', mock_dt, function(err, val) {
 				if (err) done(err)
 				default_api_test(err, val)
-					//assert.includeDeepMembers
-				expect(val.data).is.an('array')
-				expect(val.data.length).to.equal(1)
-				expect(val.data[0].ror).to.be.a('number')
-				expect(val.data[0].returns_std).to.be.a('number')
-				expect(val.data[0].returns_mean).to.be.a('number')
-				expect(val.data[0].tradingsymbol).to.be.a('string')
-				expect(val.data[0].strategy_id).to.match(/fifty_2_wk/)
+					//strategy_config
+				expect(val.strategy_config).is.an('array')
+				expect(val.strategy_config.length).to.equal(1)
+				check_strategy_config(null,val.strategy_config[0])
+				//evaluator_config
+				expect(val.evaluator_config).is.an('array')
+				expect(val.evaluator_config.length).to.equal(1)
+				check_evaluator_config(null,val.evaluator_config[0])
 				done()
 			})
 		})
@@ -56,19 +56,16 @@ describe('Strategy_stock module', function() {
 				if (err) done(err)
 				default_api_test(err, val)
 					//assert.includeDeepMembers
-				expect(val.data).is.an('array')
-				expect(val.data.length).to.equal(2)
-				expect(val.data[0].ror).to.be.a('number')
-				expect(val.data[0].returns_std).to.be.a('number')
-				expect(val.data[0].returns_mean).to.be.a('number')
-				expect(val.data[0].tradingsymbol).to.be.a('string')
-				expect(val.data[0].strategy_id).to.match(/fifty_2_wk/)
-				expect(val.data[1].ror).to.be.a('number')
-				expect(val.data[1].returns_std).to.be.a('number')
-				expect(val.data[1].returns_mean).to.be.a('number')
-				expect(val.data[1].tradingsymbol).to.be.a('string')
-				expect(val.data[1].strategy_id).to.match(/fifty_2_wk/)
-				expect(val.strategy_id).to.match(/fifty_2_wk/)
+				//strategy_config
+				expect(val.strategy_config).is.an('array')
+				expect(val.strategy_config.length).to.equal(2)
+				check_strategy_config(null,val.strategy_config[0])
+				check_strategy_config(null,val.strategy_config[1])
+				//evaluator_config
+				expect(val.evaluator_config).is.an('array')
+				expect(val.evaluator_config.length).to.equal(2)
+				check_evaluator_config(null,val.evaluator_config[0])
+				check_evaluator_config(null,val.evaluator_config[1])
 				done()
 			})
 		})
@@ -101,6 +98,23 @@ var default_api_test = function(err, val) {
 	should.exist(val)
 	expect(val).to.be.an('object')
 	expect(val.success).to.be.true
+}
+
+var check_strategy_config = function(err, val) {
+	expect(val.ror).to.be.a('number')
+	expect(val.returns_std).to.be.a('number')
+	expect(val.returns_mean).to.be.a('number')
+	expect(val.tradingsymbol).to.be.a('string')
+	expect(val.strategy_id).to.match(/fifty_2_wk/)
+}
+
+var check_evaluator_config = function(err, val) {
+	expect(val.nrr).to.be.a('number')
+	expect(val.profit_margin).to.be.a('number')
+	expect(val.buy_price_threshold).to.be.a('number')
+	expect(val.stock_ceil).to.be.a('number')
+	expect(val.tradingsymbol).to.be.a('string')
+	expect(val.strategy_id).to.match(/fifty_2_wk/)
 }
 
 function intialize(done) {
@@ -176,6 +190,8 @@ function intialize(done) {
 					entity_3_2.save$()
 				})
 			]).then(function(res) {
+				// clearing irc folder
+
 				done()
 			})
 		})

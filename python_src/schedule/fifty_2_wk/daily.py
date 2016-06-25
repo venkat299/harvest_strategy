@@ -1,14 +1,11 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-
-import sys
 import json
+import sys
 import logging
-import pandas as pd
-import numpy as np
-import math
+import uuid
 
-#### local dependency
+# local dependency
 
 import helper_daily as helper
 
@@ -24,9 +21,24 @@ opt = json.loads(lines[len(lines) - 1])
 
 
 
-final_result = {'strategy_id':'fifty_2_wk',"data":[]}
+final_result = {'strategy_id':'fifty_2_wk','strategy_config':[],'evaluator_config':[]}
 
 for stock in opt['data']:
-	final_result['data'].append(helper.daily_run({"python_dir":opt['python_dir'],"tradingsymbol":stock}))
+	final_result['strategy_config'].append(helper.strategy_config({
+			# "python_dir" : opt['python_dir'],
+			"tradingsymbol" : stock
+		}))
 
-print json.dumps(final_result)
+evaluator_config = helper.evaluator_config(final_result['strategy_config'])
+
+final_result['evaluator_config'] = evaluator_config
+logging.info('final_result')
+logging.info(final_result)
+
+json_file_name ='server/python_node_ipc/'+str(uuid.uuid4())+'.json'
+json_file = open( json_file_name, 'w')
+json.dump(final_result, json_file,encoding="utf-8")
+#json.dumps(final_result,encoding="utf-8",json_file)
+
+msg={'success':True,'file_path':json_file_name}
+print json.dumps(msg)

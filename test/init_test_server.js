@@ -55,13 +55,14 @@ function start(cb) {
 	// ###### returning a promise that db is configured  ########
 	return new Promise(function(resolve, reject) {
 		seneca.ready(function() {
-			seneca.add('role:test_server,cmd:check_status', function(opt, cb) {
-				cb(null, {
-					success: true,
-					server: 'alive',
-					server_type: 'test'
-				})
-			})
+			// seneca.add('role:test_server,cmd:check_status', function(opt, cb) {
+			// 	cb(null, {
+			// 		success: true,
+			// 		server: 'alive',
+			// 		server_type: 'test'
+			// 	})
+			// })
+			
 			seneca.listen({
 				host: 'localhost',
 				port: '8080'
@@ -84,6 +85,7 @@ var reset_db = function() {
 		// ######### removing db directories #########
 		//console.log('clearing db files')
 		rmDir(test_db_config.folder, false)
+		rmDir('server/python_node_ipc/', false)
 			// ######### creating empty db directory #########
 		var mkdirp = require('mkdirp');
 		mkdirp(test_db_config.folder, function(err) {
