@@ -3,6 +3,8 @@ var update_order = require('./lib/helper/update_order')
 var fifty_2_wk = require('./lib/fifty_2_wk.js');
 var watchlist = require('./lib/watchlist.js');
 var strategy_stock = require('./lib/strategy_stock.js');
+var signal_log = require('./lib/signal_log.js');
+var order_log = require('./lib/order_log.js');
 var routine = require('./lib/routine.js');
 var opts = {};
 module.exports = function(options) {
@@ -29,6 +31,11 @@ module.exports = function(options) {
 	seneca.add('role:strategy_stock,cmd:remove', strategy_stock.remove.bind(seneca))
 	seneca.add('role:strategy_stock,cmd:change_status', strategy_stock.change_status.bind(seneca))
 	seneca.add('role:strategy_stock,cmd:update', strategy_stock.update.bind(seneca))
+		//======= signal_log ===========//
+	seneca.add('role:signal_log,cmd:all', signal_log.all.bind(seneca))
+	//======= order_log ===========//
+	seneca.add('role:order_log,cmd:all', order_log.all.bind(seneca))
+
 	return {
 		name: 'harvest_strategy'
 	}

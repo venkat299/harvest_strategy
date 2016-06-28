@@ -26,6 +26,8 @@ var data = mock_dt.data.candles[0].reduce(function(result, field, index) {
 	return result
 }, {})
 
+data.testing = true
+
 var updated_order_sell_mock = {
 	"entity$": {
 		"name": "order_log"
@@ -159,7 +161,7 @@ var updated_order_buy_mock = {
 	//==================================
 
 describe('Strategy:fifty_2_wk', function() {
-	var skip =true;
+	var skip =false;
 	
 	if(!skip){
 		before('check test server initialization', intialize)
@@ -346,18 +348,18 @@ describe('Strategy:fifty_2_wk', function() {
 		})
 	})
 	//todo to move this out of here
-	describe('Strategy #monthly_eod_update -> run monthly_eod_update routine', function() {
-		it('should run monthly for the given stock -> should return {success:true}', function(done) {
-			this.timeout(5000);
-			seneca.act('role:routine,cmd:monthly_eod_update',  {
-				stock_list:['YESBANK']
-			}, function(err, val) {
-				if (err) done(err)
-				expect(val.success).to.be.true
-				done()
-			})
-		})
-	})
+	// describe('Strategy #monthly_eod_update -> run monthly_eod_update routine', function() {
+	// 	it('should run monthly for the given stock -> should return {success:true}', function(done) {
+	// 		this.timeout(5000);
+	// 		seneca.act('role:routine,cmd:monthly_eod_update',  {
+	// 			stock_list:['YESBANK']
+	// 		}, function(err, val) {
+	// 			if (err) done(err)
+	// 			expect(val.success).to.be.true
+	// 			done()
+	// 		})
+	// 	})
+	// })
 })
 
 
