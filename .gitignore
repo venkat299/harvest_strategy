@@ -5,5 +5,5 @@ coverage
 .DS_Store
 *.log
 server/python_data/*.csv
-
+server/python_node_ipc/*.json
 *.pyc

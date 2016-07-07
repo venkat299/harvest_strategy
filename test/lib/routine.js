@@ -20,8 +20,13 @@ var mock_dt_web = {
 	}
 	//==================================
 describe('Routine module', function() {
-	before('check test server initialization', intialize)
-	after('close server', close_seneca)
+    var skip = false;
+    if (!skip) {
+        before('check test server initialization', intialize)
+        after('close server', close_seneca)
+    } else before('check test server initialization', function() {
+        this.skip()
+    })
 		//==========`=== tests ==============
 	describe('#run_routine_all: run routine for a multiple stock', run_routine_all)
 	describe('#run_routine: run routine for a single stock', run_routine)
@@ -129,7 +134,8 @@ function intialize(done) {
 			strategy_id: 'fifty_2_wk',
 			budget: 10000,
 			spent: 2000,
-			equity_ceil: 0.2
+			equity_ceil: 0.2,
+			shadowing:true
 		})
 		var entity_1_save$ = Promise.promisify(entity_1.save$, {
 			context: entity_1

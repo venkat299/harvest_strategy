@@ -11,12 +11,12 @@ quandl.ApiConfig.api_key = '1CzVT1zp5yzCQjQNq8yR'
 logging.basicConfig(level=logging.DEBUG, filename="logfile.log",filemode="a+",format="%(message)s")
 
 lines = sys.stdin.readlines()
-logging.info('input lines:%s data:%s',len(lines),lines)
+#logging.info('input lines:%s data:%s',len(lines),lines)
 in_data = json.loads(lines[len(lines)-1])
 
 
 def check (curr):
-	logging.info(curr)
+	#logging.info(curr)
 	stk = curr['strategy_stock']
 	isTestEnv = ('testing' in curr) and curr.get('testing') # check if test env is true
 	####### data retrieval part ###########
@@ -43,14 +43,23 @@ def check (curr):
 	#logging.info('close at 52 wk :%s',cl_52_max)
 	ltp =  curr['close'] #curr['ltp'] or curr['close'] 
 
-	signal = False
+	#signal = False
 	if curr['transaction_type']=='BUY':
 		if ltp <= cl_52_min * stk['buy_price_threshold']:
+			#logging.info('%s:in buy signal true',curr['tradingsymbol'])
 			signal = True
+		else:
+			#logging.info('%s:in buy signal false',curr['tradingsymbol'])
+			signal = False
 	if curr['transaction_type']=='SELL':
 		if ltp >= prev_buy_price * stk['profit_margin']:
+			#logging.info('%s:in sell signal true',curr['tradingsymbol'])
 			signal = True
+		else:
+			#logging.info('%s:in sell signal false',curr['tradingsymbol'])
+			signal = False
 
+	logging.info("stock:%s, call:%s,  cl_52_min:%s, ltp:%s, trigger:%s , signal:%s, eval:%s",curr['tradingsymbol'],curr['transaction_type'],cl_52_min,ltp,cl_52_min * stk['buy_price_threshold'],signal,ltp <= (cl_52_min * stk['buy_price_threshold']))
 	
 	result = {}
 	result['success'] = signal
