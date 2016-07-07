@@ -108,8 +108,9 @@ def find_max(dt_arr,margin):
 	df_hold_days = pd.DataFrame(op_cl_periods)
 	returns_std = df_std.std()  # /df_std.mean()
 	returns_mean = df_std.mean()
-	returns_hold_days_mean= df_hold_days.mean()
-	returns_hold_days_std = df_hold_days.std()
+	returns_median = df_std.median()
+	hold_days_mean= df_hold_days.median()
+	hold_days_std = df_hold_days.std()
 	score = (returns_mean/returns_std)
 
 	res = {}
@@ -119,7 +120,12 @@ def find_max(dt_arr,margin):
 	res['returns_std'] =round(returns_std, 4)
 	res['ror'] = round(variable_limit_profit / fixed_limit, 4)
 	res['extra_info'] = {'cycle_periods': op_cl_periods,
-	                      'fixed_returns': fixed_returns}
+	                      'fixed_returns': fixed_returns,
+	                      'score':round(score,4),
+	                      'returns_median':round(returns_median),
+	                      'returns_std':round(returns_std,4),
+	                      'hold_days_mean':round(hold_days_mean),
+	                      'hold_days_std':round(hold_days_std,4)}
 	return (True,res)
 
 def evaluator_config(ror_dt):

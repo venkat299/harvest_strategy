@@ -20,7 +20,7 @@ var mock_dt_web = {
 	}
 	//==================================
 describe('Routine module', function() {
-    var skip = false;
+    var skip = true;
     if (!skip) {
         before('check test server initialization', intialize)
         after('close server', close_seneca)

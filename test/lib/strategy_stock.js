@@ -23,7 +23,7 @@ var mock_update_dt = {
 	}
 	//==================================
 describe('Strategy_stock module', function() {
-    var skip = true;
+    var skip = false;
     if (!skip) {
         before('check test server initialization', intialize)
         after('close server', close_seneca)

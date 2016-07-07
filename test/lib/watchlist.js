@@ -13,7 +13,7 @@ var mock_dt = {
 	}
 	//==================================
 describe('Watchlist module', function() {
-    var skip = true;
+    var skip = false;
     if (!skip) {
         before('check test server initialization', intialize)
         after('close server', close_seneca)

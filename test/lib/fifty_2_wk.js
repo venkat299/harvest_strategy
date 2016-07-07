@@ -153,7 +153,7 @@ var updated_order_buy_mock = {
     }
     //==================================
 describe('Strategy:fifty_2_wk', function() {
-    var skip = true;
+    var skip = false;
     if (!skip) {
         before('check test server initialization', intialize)
         after('close server', close_seneca)
