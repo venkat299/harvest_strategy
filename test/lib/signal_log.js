@@ -16,7 +16,7 @@ describe('Clear expired signal', function() {
     if (!skip) {
         before('check test server initialization', intialize)
         after('close server', close_seneca)
-    } else before('check test server initialization', function() {
+    } else before('skiping tests', function() {
             this.skip()
         })
         //==========`=== tests ==============
@@ -33,7 +33,7 @@ describe('Clear expired signal', function() {
                 setTimeout(function(seneca, expect, done) {
                     seneca.make$('signal_log').list$({}, function(err, val) {
                         if (err) done(err)
-                        expect(val.length).to.equal(2)
+                        expect(val.length).to.equal(3)
                         done()
                     })
                 }, 1000, seneca, expect, done)

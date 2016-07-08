@@ -27,7 +27,7 @@ describe('Strategy_stock module', function() {
     if (!skip) {
         before('check test server initialization', intialize)
         after('close server', close_seneca)
-    } else before('check test server initialization', function() {
+    } else before('skiping tests', function() {
         this.skip()
     })		//============= tests ==============
 	describe('#add', add)
