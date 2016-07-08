@@ -35,6 +35,8 @@ module.exports = function(options) {
 	seneca.add('role:signal_log,cmd:all', signal_log.all.bind(seneca))
 	//======= order_log ===========//
 	seneca.add('role:order_log,cmd:all', order_log.all.bind(seneca))
+		//======= clear expired signals ===========//
+	seneca.add('role:signal_log,cmd:delete_expired', signal_log.delete_expired.bind(seneca))
 
 	return {
 		name: 'harvest_strategy'

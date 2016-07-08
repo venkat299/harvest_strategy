@@ -5,6 +5,7 @@ var chai = require('chai'),
 var Promise = require('bluebird')
 	// ###### initializing test server ########
 var intialize_server = require('../init_test_server.js')
+var skip = require('../skip_test.json')['lib/routine']
 var seneca;
 //=========== mock strategy_config ============
 var mock_dt = {
@@ -20,7 +21,6 @@ var mock_dt_web = {
 	}
 	//==================================
 describe('Routine module', function() {
-    var skip = true;
     if (!skip) {
         before('check test server initialization', intialize)
         after('close server', close_seneca)

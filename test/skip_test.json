@@ -1,0 +1,8 @@
+{
+
+	"lib/fifty_2_wk":true,
+	"lib/routine":true,
+	"lib/strategy_stock":true,
+	"lib/watchlist":true,
+	"lib/signal_log":false
+}
