@@ -36,7 +36,7 @@ describe('Clear expired signal', function() {
                         expect(val.length).to.equal(2)
                         done()
                     })
-                }, 3000, seneca, expect, done)
+                }, 1000, seneca, expect, done)
             })
         })
     }

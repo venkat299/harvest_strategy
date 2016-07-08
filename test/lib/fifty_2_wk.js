@@ -238,7 +238,7 @@ describe('Strategy:fifty_2_wk', function() {
     })
     describe('Strategy #update_order -> buy scenario', function() {
         it('update signal info to OPEN -> should return signal with signal_status as OPEN', function(done) {
-            seneca.act('role:strategy,id:fifty_2_wk,cmd:update_order', updated_order_buy_mock, function(err, val) {
+            seneca.act('role:signal_log,cmd:update_order', updated_order_buy_mock, function(err, val) {
                 if (err) done(err)
                 expect(val.signal_status).to.match(/OPEN/)
                 expect(val.transaction_type).to.match(/BUY/)
@@ -326,7 +326,7 @@ describe('Strategy:fifty_2_wk', function() {
     })
     describe('Strategy #update_order -> sell scenario', function() {
         it('update signal info to CLOSE -> should return signal with signal_status as OPEN', function(done) {
-            seneca.act('role:strategy,id:fifty_2_wk,cmd:update_order', updated_order_sell_mock, function(err, val) {
+            seneca.act('role:signal_log,cmd:update_order', updated_order_sell_mock, function(err, val) {
                 if (err) done(err)
                 expect(val.signal_status).to.match(/CLOSE/)
                 expect(val.transaction_type).to.match(/SELL/)
@@ -335,7 +335,7 @@ describe('Strategy:fifty_2_wk', function() {
             })
         })
     })
-   // todo to move this out of here
+   // todo  move this test harvest_data
     // describe('Strategy #monthly_eod_update -> run monthly_eod_update routine', function() {
     // 	it('should run monthly for the given stock -> should return {success:true}', function(done) {
     // 		this.timeout(5000);
@@ -413,7 +413,7 @@ function intialize(done) {
 }
 
 function close_seneca(done) {
-    //console.log('closing seneca instance')
+    console.log('closing seneca instance')
     //quandl.get("NSE/YESBANK", authtoken="1CzVT1zp5yzCQjQNq8yR", start_date="2013-06-08")
     seneca.close(done)
 }
