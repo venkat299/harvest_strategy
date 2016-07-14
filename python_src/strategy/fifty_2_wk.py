@@ -43,6 +43,7 @@ def check (curr):
 	#logging.info('close at 52 wk :%s',cl_52_max)
 	ltp =  curr['close'] #curr['ltp'] or curr['close'] 
 
+	logging.info('prev_buy_price :%s,stk[profit_margin]:%s',prev_buy_price,stk['profit_margin'])
 	#signal = False
 	if curr['transaction_type']=='BUY':
 		if ltp <= cl_52_min * stk['buy_price_threshold']:
