@@ -14,10 +14,15 @@
     "seneca-entity": "0.0.1"
   },
   "devDependencies": {
-    "harvest_data": "git+https://github.com/venkat299/harvest_data.git",
-    "harvest_executor": "git+https://github.com/venkat299/harvest_executor.git",
-    "harvest_evaluator": "git+https://github.com/venkat299/harvest_evaluator.git",
     "coveralls": "^2.11.9",
+    "eslint": "^3.1.1",
+    "eslint-config-airbnb": "^9.0.1",
+    "eslint-plugin-import": "^1.11.0",
+    "eslint-plugin-jsx-a11y": "^2.0.1",
+    "eslint-plugin-react": "^5.2.2",
+    "harvest_data": "file:///Users/venkat299/code/harvest_api/harvest_data",
+    "harvest_evaluator": "file:///Users/venkat299/code/harvest_api/harvest_evaluator",
+    "harvest_executor": "file:///Users/venkat299/code/harvest_api/harvest_executor",
     "istanbul": "^0.4.3",
     "mkdirp": "^0.5.1",
     "mocha": "^2.4.5",

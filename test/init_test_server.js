@@ -65,7 +65,7 @@ function start(cb) {
 			
 			seneca.listen({
 				host: 'localhost',
-				port: '8080'
+				port: '3000'
 			})
 			resolve(seneca)
 				//console.log('test server listening')

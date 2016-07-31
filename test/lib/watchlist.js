@@ -5,6 +5,7 @@ var chai = require('chai'),
 var Promise = require('bluebird')
 	// ###### initializing test server ########
 var intialize_server = require('../init_test_server.js')
+var skip = require('../skip_test.json')['lib/watchlist']
 var seneca;
 //=========== mock data ============
 var mock_dt = {
@@ -13,8 +14,12 @@ var mock_dt = {
 	}
 	//==================================
 describe('Watchlist module', function() {
-	before('check test server initialization', intialize)
-	after('close server', close_seneca)
+    if (!skip) {
+        before('check test server initialization', intialize)
+        after('close server', close_seneca)
+    } else before('skiping tests', function() {
+        this.skip()
+    })
 		//============= tests ==============
 	describe('#add', add)
 	describe('#retire', retire)

@@ -76,10 +76,11 @@ def find_max(dt_arr,margin):
 	    if curr <= temp_min_margin:
 	        open = True
 	        last_buy_price = curr
-	        op_cl_period = n
 	        fixed_qty = math.ceil(fixed_limit / curr)
 	        variable_qty = math.ceil(variable_limit / curr)
-	    elif curr > last_buy_price * margin and last_buy_price > 0:
+	        if op_cl_period==0:
+	        	op_cl_period = n
+	    elif curr > (last_buy_price * margin) and last_buy_price > 0:
 	        open = False
 	        fixed_limit_profit = fixed_limit_profit + (last_buy_price
 	                - curr) * -1 * fixed_qty
@@ -95,7 +96,7 @@ def find_max(dt_arr,margin):
 	        op_cl_period = 0
 	        fixed_qty = 0
 	        variable_qty = 0
-	     # logging.info('n:%s curr:%s max:%s min:%s margin:%s open:%s fixed_profit:%s varied_profit:%s',n,curr,temp_max,temp_min,temp_min_margin,open,fixed_limit_profit,variable_limit_profit),
+	    #logging.info('==> n:%s curr:%s max:%s min:%s margin:%s open:%s fixed_profit:%s varied_profit:%s op_cl_period:%s',n,curr,temp_max,temp_min,temp_min_margin,open,fixed_limit_profit,variable_limit_profit,op_cl_period),
 	    n = n + 1
 	    
 	logging.info(n)
@@ -104,16 +105,27 @@ def find_max(dt_arr,margin):
 	if order_cycles<=1:
 		return (False,{})
 	df_std = pd.DataFrame(fixed_returns)
+	df_hold_days = pd.DataFrame(op_cl_periods)
 	returns_std = df_std.std()  # /df_std.mean()
 	returns_mean = df_std.mean()
+	returns_median = df_std.median()
+	hold_days_mean= df_hold_days.median()
+	hold_days_std = df_hold_days.std()
+	score = (returns_mean/returns_std)
 
 	res = {}
+	res['strategy_score'] =  round(score,4)
 	res['returns_mean'] =  round(returns_mean)
 	res['margin'] =  round(margin,4)
 	res['returns_std'] =round(returns_std, 4)
 	res['ror'] = round(variable_limit_profit / fixed_limit, 4)
 	res['extra_info'] = {'cycle_periods': op_cl_periods,
-	                      'fixed_returns': fixed_returns}
+	                      'fixed_returns': fixed_returns,
+	                      'score':round(score,4),
+	                      'returns_median':round(returns_median),
+	                      'returns_std':round(returns_std,4),
+	                      'hold_days_mean':round(hold_days_mean),
+	                      'hold_days_std':round(hold_days_std,4)}
 	return (True,res)
 
 def evaluator_config(ror_dt):
