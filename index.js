@@ -5,7 +5,7 @@ const signal_log = require('./lib/signal_log.js').signal_log;
 const order_log = require('./lib/order_log.js');
 const routine = require('./lib/routine.js');
 let opts = {};
-module.exports = (options) => {
+module.exports = function(options){
   const seneca = this;
   const extend = seneca.util.deepextend;
   opts = extend(opts, options);

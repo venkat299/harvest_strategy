@@ -3,6 +3,6 @@
     "lib/routine": true,
     "lib/strategy_stock": true,
     "lib/watchlist": true,
-    "lib/signal_log": true,
+    "lib/signal_log": false,
     "lib/order_log": false
 }
