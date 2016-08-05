@@ -4,6 +4,7 @@ const mkdirp = require('mkdirp');
 const portfinder = require('portfinder');
 
 const config = require('../config.json');
+const mkdirp = require('mkdirp');
 // ======= change db here =========
 const test_db = config.test.current_db;
 // ================================
@@ -85,17 +86,14 @@ const reset_db = function (cb) {
     rmDir(test_db_config.folder, false);
     rmDir('server/python_node_ipc/', false);
     // ######### creating empty db directory #########
-    const mkdirp = require('mkdirp');
-    mkdirp(test_db_config.folder, function (err) {
-      // path exists unless there was an error
-      if (err)
-        throw err;
-      console.log('>>>> deleted the db files');
-      cb({
-        seneca,
-        port: custom_port,
-      });
+    mkdirp.sync(test_db_config.folder);
+    // path exists unless there was an error
+    console.log('>>>> deleted the db files');
+    cb({
+      seneca,
+      port: custom_port,
     });
+
   }
 };
 const rmDir = function (dirPath, removeSelf) {
@@ -129,7 +127,6 @@ after(function (done) {
   seneca.close(done);
   done();
 });
-
 
 // module.exports.start = start;
 module.exports.get_server = reset_db;
