@@ -25,6 +25,8 @@ function start(cb) {
     });
   }
   mkdirp.sync(test_db_config.folder);
+  mkdirp.sync('server/python_node_ipc/');
+
   // Promise.promisify(seneca.make$,{context:seneca})
   // Promise.promisify(seneca.list$,{context:seneca})
 
@@ -86,6 +88,7 @@ const reset_db = function (cb) {
     rmDir('server/python_node_ipc/', false);
     // ######### creating empty db directory #########
     mkdirp.sync(test_db_config.folder);
+
     // path exists unless there was an error
     console.log('>>>> deleted the db files');
     cb({
