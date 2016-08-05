@@ -1,8 +1,8 @@
 {
-    "lib/fifty_2_wk": true,
-    "lib/routine": true,
-    "lib/strategy_stock": true,
-    "lib/watchlist": true,
-    "lib/signal_log": false,
-    "lib/order_log": false
+  "lib/fifty_2_wk": false,
+  "lib/routine": false,
+  "lib/strategy_stock": false,
+  "lib/watchlist": false,
+  "lib/signal_log": false,
+  "lib/order_log": false
 }

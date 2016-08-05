@@ -9,9 +9,11 @@
   },
   "dependencies": {
     "bluebird": "^3.3.5",
+    "portfinder": "^1.0.5",
     "python-shell": "^0.4.0",
     "seneca": "^2.0.1",
-    "seneca-entity": "0.0.1"
+    "seneca-entity": "0.0.1",
+    "winston": "^2.2.0"
   },
   "devDependencies": {
     "coveralls": "^2.11.9",
@@ -20,9 +22,9 @@
     "eslint-plugin-import": "^1.11.0",
     "eslint-plugin-jsx-a11y": "^2.0.1",
     "eslint-plugin-react": "^5.2.2",
-    "harvest_data": "file:///Users/venkat299/code/harvest_api/harvest_data",
-    "harvest_evaluator": "file:///Users/venkat299/code/harvest_api/harvest_evaluator",
-    "harvest_executor": "file:///Users/venkat299/code/harvest_api/harvest_executor",
+    "harvest_data": "git+https://github.com/venkat299/harvest_data.git",
+    "harvest_evaluator": "git+https://github.com/venkat299/harvest_evaluator.git",
+    "harvest_executor": "git+https://github.com/venkat299/harvest_executor.git",
     "istanbul": "^0.4.3",
     "mkdirp": "^0.5.1",
     "mocha": "^2.4.5",

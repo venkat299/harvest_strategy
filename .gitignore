@@ -1,9 +1,11 @@
 node_modules
 examples
-test/test_db/
+test/test_db/*/*.json
 coverage
 .DS_Store
 *.log
 server/python_data/*.csv
 server/python_node_ipc/*.json
 *.pyc
+
+test/lib/routine.js
