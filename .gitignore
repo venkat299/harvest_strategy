@@ -1,6 +1,6 @@
 node_modules
 examples
-test/test_db/
+test/test_db/*/*.json
 coverage
 .DS_Store
 *.log
