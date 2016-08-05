@@ -3,7 +3,7 @@ let chai = require('chai'),
   assert = chai.assert,
   should = chai.should();
 const Promise = require('bluebird');
-  // ###### initializing test server ########
+// ###### initializing test server ########
 const intialize_server = require('../init_test_server.js');
 const skip = require('../skip_test.json')['lib/fifty_2_wk'];
 let seneca;
@@ -107,9 +107,9 @@ const updated_order_buy_mock = {
     'validity': 'DAY',
   },
   'status_log': [
-      ['INIT', 1463943557324],
-      ['PLACED', 1463943557326],
-      ['COMPLETE', 1463943557347],
+    ['INIT', 1463943557324],
+    ['PLACED', 1463943557326],
+    ['COMPLETE', 1463943557347],
   ],
   'kite_response': [{
     'order_id': '151220000000000',
@@ -152,11 +152,11 @@ const updated_order_buy_mock = {
     'checksum': '5aa3f8e3c8cc41cff362de9f73212e28',
   },
 };
-  //= =================================
+//= =================================
 describe('Strategy:fifty_2_wk', function () {
   if (!skip) {
     before('check test server initialization', intialize);
-    after('close server', close_seneca);
+    // after('close server', close_seneca);
   } else before('skiping tests', function () {
     this.skip();
   });
@@ -360,12 +360,12 @@ const default_api_test = function (err, val, cb) {
 };
 
 function intialize(done) {
-  intialize_server.start().then(function (options) {
+  intialize_server.get_server(function (options) {
     // console.log(options.seneca)
     seneca = options.seneca;
     seneca.client({
       host: 'localhost',
-      port:options.port,
+      port: options.port,
     });
     const entity_1 = seneca.make$('strategy', {
       strategy_id: 'fifty_2_wk',
@@ -400,15 +400,16 @@ function intialize(done) {
     const entity_3_save$ = Promise.promisify(entity_3.save$, {
       context: entity_3,
     });
-    seneca.ready(function () {
-      Promise.all([
-        entity_1_save$(),
-        entity_2_save$(),
-        entity_3_save$(),
-      ]).then(function (res) {
-        done();
-      });
+    // seneca.ready(function () {
+    Promise.all([
+      entity_1_save$(),
+      entity_2_save$(),
+      entity_3_save$(),
+    ]).then(function (res) {
+      console.log('>>>> before all hook cleared');
+      done();
     });
+    // });
   });
 }
 

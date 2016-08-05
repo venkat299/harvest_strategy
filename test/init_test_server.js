@@ -10,15 +10,18 @@ const test_db = config.test.current_db;
 const test_db_name = config.test[test_db].db_type;
 const test_db_config = config.test[test_db].db_config;
 
+const custom_port = 8080;
 // ###### testing module ########
+let seneca = require('seneca')();
+
 function start(cb) {
-  const seneca = require('seneca')();
+  seneca = require('seneca')();
   const Promise = require('bluebird');
   if (seneca.listening) {
-  	console.log('server already listenning')
+    console.log('server already listenning');
     resolve({
-      seneca: seneca,
-      port: 8080
+      seneca,
+      port: custom_port,
     });
   }
 
@@ -39,9 +42,6 @@ function start(cb) {
   // ###### current service being tested ########
   seneca.use('../index.js');
 
-  // ###### resetting db  ########
-  reset_db();
-
   // ###### adding test db  ########
   try {
     seneca.use('entity');
@@ -56,37 +56,23 @@ function start(cb) {
   });
 
   // ###### returning a promise that db is configured  ########
-  return new Promise(function (resolve, reject) {
-    seneca.ready(function () {
-      // seneca.add('role:test_server,cmd:check_status', function(opt, cb) {
-      // 	cb(null, {
-      // 		success: true,
-      // 		server: 'alive',
-      // 		server_type: 'test'
-      // 	})
-      // })
-      // portfinder.getPort(function (err, port) {
-      //
-      // `port` is guaranteed to be a free port
-      // in this scope.
-      //
-      seneca.listen({
-        host: 'localhost',
-        port: 8080,
-      });
-
-      resolve({
-        seneca: seneca,
-        port: 8080
-      });
-      // });
-
-      // console.log('test server listening')
+  // return new Promise(function (resolve, reject) {
+  seneca.ready(function () {
+    seneca.listen({
+      host: 'localhost',
+      port: custom_port,
     });
+    cb();
+    // resolve({
+    //   seneca: seneca,
+    //   port: custom_port
+    // });
+    // console.log('test server listening')
   });
+  // });
 }
 
-const reset_db = function () {
+const reset_db = function (cb) {
   // ###### for mongo db  ########
   if (test_db === 'mongo') {
     // drop mongo db
@@ -104,6 +90,11 @@ const reset_db = function () {
       // path exists unless there was an error
       if (err)
         throw err;
+      console.log('>>>> deleted the db files');
+      cb({
+        seneca,
+        port: custom_port,
+      });
     });
   }
 };
@@ -128,4 +119,17 @@ const rmDir = function (dirPath, removeSelf) {
     fs.rmdirSync(dirPath);
 };
 
-module.exports.start = start;
+before(function (done) {
+  console.log('===== starting server =======');
+  start(done);
+});
+
+after(function (done) {
+  console.log('====== closing server  =====');
+  seneca.close(done);
+  done();
+});
+
+
+// module.exports.start = start;
+module.exports.get_server = reset_db;
