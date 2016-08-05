@@ -4,7 +4,6 @@ const mkdirp = require('mkdirp');
 const portfinder = require('portfinder');
 
 const config = require('../config.json');
-const mkdirp = require('mkdirp');
 // ======= change db here =========
 const test_db = config.test.current_db;
 // ================================
