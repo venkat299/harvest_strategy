@@ -24,7 +24,7 @@ function start(cb) {
       port: custom_port,
     });
   }
-
+  mkdirp.sync(test_db_config.folder);
   // Promise.promisify(seneca.make$,{context:seneca})
   // Promise.promisify(seneca.list$,{context:seneca})
 
