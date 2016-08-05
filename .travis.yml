@@ -4,6 +4,11 @@ node_js:
 python:
   - "2.7"
 script: make test-coveralls
+cache:
+  bundler: true
+  pip: true
+  directories:
+  - node_modules # NPM packages
 sudo: false
 before_install:
   - pip install --user quandl

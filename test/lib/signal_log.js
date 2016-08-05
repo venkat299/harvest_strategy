@@ -97,13 +97,13 @@ describe('signal_log:', function() {
 })
 
 function intialize(done) {
-    intialize_server.start().then(function(my_seneca) {
-        //console.log(my_seneca)
-        seneca = my_seneca
-        seneca.client({
-            host: 'localhost',
-            port: '8080'
-        });
+  intialize_server.start().then(function (options) {
+    // console.log(options.seneca)
+    seneca = options.seneca;
+    seneca.client({
+      host: 'localhost',
+      port:options.port,
+    });
         seneca.ready(function() {
             var entity_1 = seneca.make$('signal_log', {
                 "transaction_type": "BUY",

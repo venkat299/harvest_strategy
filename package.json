@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "bluebird": "^3.3.5",
+    "portfinder": "^1.0.5",
     "python-shell": "^0.4.0",
     "seneca": "^2.0.1",
     "seneca-entity": "0.0.1",
