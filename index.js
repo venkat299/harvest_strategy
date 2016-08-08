@@ -5,7 +5,8 @@ const signal_log = require('./lib/signal_log.js').signal_log;
 const order_log = require('./lib/order_log.js');
 const routine = require('./lib/routine.js');
 let opts = {};
-module.exports = function(options){
+
+function init(options) {
   const seneca = this;
   const extend = seneca.util.deepextend;
   opts = extend(opts, options);
@@ -36,4 +37,6 @@ module.exports = function(options){
   return {
     name: 'harvest_strategy',
   };
-};
+}
+
+module.exports = init;

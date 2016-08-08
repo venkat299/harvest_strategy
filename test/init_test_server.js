@@ -1,7 +1,17 @@
 const path = require('path');
 const fs = require('fs');
 const mkdirp = require('mkdirp');
-const portfinder = require('portfinder');
+const Promise = require('bluebird');
+const logger = require('../app_logger').logger;
+
+// ###### service needed for testing  ########
+// const harvest_strategy = require('harvest_strategy');
+const harvest_data = require('harvest_data');
+const harvest_evaluator = require('harvest_evaluator');
+const harvest_executor = require('harvest_executor');
+
+// ###### testing module ########
+const seneca = require('seneca')();
 
 const config = require('../config.json');
 // ======= change db here =========
@@ -11,30 +21,30 @@ const test_db_name = config.test[test_db].db_type;
 const test_db_config = config.test[test_db].db_config;
 
 const custom_port = 8080;
-// ###### testing module ########
-let seneca = require('seneca')();
+
+function rmDir(dirPath, removeSelf) {
+  /* eslint no-param-reassign:0 */
+  if (removeSelf === undefined) removeSelf = true;
+  let files;
+  try {
+    files = fs.readdirSync(dirPath);
+  } catch (e) {
+    // throw e
+    return;
+  }
+  if (files.length > 0) {
+    for (let i = 0; i < files.length; i++) {
+      const filePath = path.join(dirPath, files[i]);
+      if (fs.statSync(filePath).isFile()) fs.unlinkSync(filePath);
+      else rmDir(filePath);
+    }
+  }
+  if (removeSelf) fs.rmdirSync(dirPath);
+}
 
 function start(cb) {
-  seneca = require('seneca')();
-  const Promise = require('bluebird');
-  if (seneca.listening) {
-    console.log('server already listenning');
-    resolve({
-      seneca,
-      port: custom_port,
-    });
-  }
   mkdirp.sync(test_db_config.folder);
   mkdirp.sync('server/python_node_ipc/');
-
-  // Promise.promisify(seneca.make$,{context:seneca})
-  // Promise.promisify(seneca.list$,{context:seneca})
-
-  // ###### service needed for testing  ########
-  // var harvest_strategy = require('harvest_strategy');
-  const harvest_data = require('harvest_data');
-  const harvest_evaluator = require('harvest_evaluator');
-  const harvest_executor = require('harvest_executor');
 
   seneca.use(harvest_data);
   // seneca.use(harvest_strategy)
@@ -49,7 +59,7 @@ function start(cb) {
     seneca.use('entity');
     seneca.use(test_db_name, test_db_config);
   } catch (err) {
-    console.log(err);
+    logger.debug(err);
   }
 
   // ###### promisifying method act  ########
@@ -59,7 +69,7 @@ function start(cb) {
 
   // ###### returning a promise that db is configured  ########
   // return new Promise(function (resolve, reject) {
-  seneca.ready(function () {
+  seneca.ready(() => {
     seneca.listen({
       host: 'localhost',
       port: custom_port,
@@ -69,63 +79,41 @@ function start(cb) {
     //   seneca: seneca,
     //   port: custom_port
     // });
-    // console.log('test server listening')
+    // logger.debug('test server listening')
   });
   // });
 }
 
-const reset_db = function (cb) {
+function reset_db(cb) {
   // ###### for mongo db  ########
   if (test_db === 'mongo') {
     // drop mongo db
-    // console.log('clearing mongodb database')
-  }
-  // ###### for level db and json-file db  ########
-  else {
+    // logger.debug('clearing mongodb database')
+  } else {
+    // ###### for level db and json-file db  ########
     // ######### removing db directories #########
-    // console.log('clearing db files')
+    // logger.debug('clearing db files')
     rmDir(test_db_config.folder, false);
     rmDir('server/python_node_ipc/', false);
     // ######### creating empty db directory #########
     mkdirp.sync(test_db_config.folder);
 
     // path exists unless there was an error
-    console.log('>>>> deleted the db files');
+    logger.debug('>>>> deleted the db files');
     cb({
       seneca,
       port: custom_port,
     });
-
   }
-};
-const rmDir = function (dirPath, removeSelf) {
-  if (removeSelf === undefined)
-    removeSelf = true;
-  try {
-    var files = fs.readdirSync(dirPath);
-  } catch (e) {
-    // throw e
-    return;
-  }
-  if (files.length > 0)
-    for (let i = 0; i < files.length; i++) {
-      const filePath = path.join(dirPath, files[i]);
-      if (fs.statSync(filePath).isFile())
-        fs.unlinkSync(filePath);
-      else
-        rmDir(filePath);
-    }
-  if (removeSelf)
-    fs.rmdirSync(dirPath);
-};
-
-before(function (done) {
-  console.log('===== starting server =======');
+}
+/* eslint no-undef:0 */
+before((done) => {
+  logger.debug('===== starting server =======');
   start(done);
 });
 
-after(function (done) {
-  console.log('====== closing server  =====');
+after((done) => {
+  logger.debug('====== closing server  =====');
   seneca.close(done);
   done();
 });
