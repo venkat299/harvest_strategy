@@ -36,7 +36,9 @@ describe('Strategy_stock module', function () {
   describe('#change_status', change_status);
   describe('#all only with status active', all);
   describe('#update', update);
+  describe('#reset_strategy', reset_strategy);
   describe('#remove', remove);
+
   //= =================================
   function add() {
     it('should return entity after adding entry in database', function (done) {
@@ -118,6 +120,16 @@ describe('Strategy_stock module', function () {
         expect(val.entity.buy_price_threshold).to.be.closeTo(mock_update_dt.buy_price_threshold, 0.01);
         expect(val.entity.prev_buy_price).to.be.closeTo(mock_update_dt.prev_buy_price, 0.01);
         expect(val.entity.prev_sell_price).to.be.closeTo(mock_update_dt.prev_sell_price, 0.01);
+        done();
+      });
+    });
+  }
+
+  function reset_strategy() {
+    it('should delete the order log, signal log associated with the strategy', function (done) {
+      seneca.act('role:strategy_stock,cmd:reset_strategy', mock_dt, function (err, val) {
+        if (err) done(err);
+        default_api_test(err, val);
         done();
       });
     });

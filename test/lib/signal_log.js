@@ -24,6 +24,8 @@ describe('signal_log:', function () {
   describe('#revert_signal : close-pending', revert_signal_1);
   describe('#revert_signal : open-pending', revert_signal_2);
   describe('#delete_signal ', delete_signal);
+  // describe('#delete_by_strategy ', delete_by_strategy);
+
   // describe('#retire', retire)
   //= =================================
   function clear_expired_signals() {
@@ -94,6 +96,17 @@ describe('signal_log:', function () {
       });
     });
   }
+
+  function delete_by_strategy() {
+    it('deletes all signal associated  with a strategy', (done) => {
+      seneca.act('role:signal_log,cmd:delete_by_strategy', mock_dt, (err, val) => {
+        if (err) done(err);
+        // strategy_config
+        expect(val.success).to.be.true;
+        done();
+      });
+    });
+  }
 });
 
 function intialize(done) {
@@ -106,28 +119,28 @@ function intialize(done) {
     });
     seneca.ready(function () {
       const entity_1 = seneca.make$('signal_log', {
-        'transaction_type': 'BUY',
-        'tradingsymbol': 'GMBREW',
-        'strategy_id': 'fifty_2_wk',
-        'signal_status': 'PENDING_OPEN',
+        transaction_type: 'BUY',
+        tradingsymbol: 'GMBREW',
+        strategy_id: 'fifty_2_wk',
+        signal_status: 'PENDING_OPEN',
       }).save$(function () {
         const entity_2 = seneca.make$('signal_log', {
-          'transaction_type': 'BUY',
-          'tradingsymbol': 'YESBANK',
-          'strategy_id': 'fifty_2_wk',
-          'signal_status': 'OPEN',
+          transaction_type: 'BUY',
+          tradingsymbol: 'YESBANK',
+          strategy_id: 'fifty_2_wk',
+          signal_status: 'OPEN',
         }).save$(function () {
           const entity_3 = seneca.make$('signal_log', {
-            'transaction_type': 'BUY',
-            'tradingsymbol': 'ZEE',
-            'strategy_id': 'fifty_2_wk',
-            'signal_status': 'PENDING_CLOSE',
+            transaction_type: 'BUY',
+            tradingsymbol: 'ZEE',
+            strategy_id: 'fifty_2_wk',
+            signal_status: 'PENDING_CLOSE',
           }).save$(function () {
             const entity_4 = seneca.make$('signal_log', {
-              'transaction_type': 'BUY',
-              'tradingsymbol': 'KUNGFOO',
-              'strategy_id': 'fifty_2_wk',
-              'signal_status': 'CLOSE',
+              transaction_type: 'BUY',
+              tradingsymbol: 'KUNGFOO',
+              strategy_id: 'fifty_2_wk',
+              signal_status: 'CLOSE',
             }).save$(function () {
               console.log('>>>> before all hook cleared');
               done(); // <======== finally done is called here
