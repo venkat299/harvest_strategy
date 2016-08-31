@@ -22,14 +22,9 @@ function init(options) {
   seneca.add('role:watchlist,cmd:retire', watchlist.retire.bind(seneca));
   seneca.add('role:watchlist,cmd:remove', watchlist.remove.bind(seneca));
   seneca.add('role:watchlist,cmd:change_status', watchlist.change_status.bind(seneca));
+  seneca.add('role:watchlist,cmd:reset_by_strategy', watchlist.reset_by_strategy.bind(seneca));
   // ======= strategy_stock =========== //
   seneca.use(strategy_stock, opts);
-  // seneca.add('role:strategy_stock,cmd:all', strategy_stock.all.bind(seneca));
-  // seneca.add('role:strategy_stock,cmd:add', strategy_stock.add.bind(seneca));
-  // seneca.add('role:strategy_stock,cmd:retire', strategy_stock.retire.bind(seneca));
-  // seneca.add('role:strategy_stock,cmd:remove', strategy_stock.remove.bind(seneca));
-  // seneca.add('role:strategy_stock,cmd:change_status', strategy_stock.change_status.bind(seneca));
-  // seneca.add('role:strategy_stock,cmd:update', strategy_stock.update.bind(seneca));
   // ======= signal_log =========== //
   seneca.use(signal_log, opts);
   // ======= order_log =========== //

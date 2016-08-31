@@ -26,6 +26,7 @@ describe('Watchlist module', function () {
   describe('#change_status', change_status);
   describe('#all: check entry is present in watchlist & strategy_stock collection', all);
   describe('#activate', activate);
+  describe('#reset_by_strategy', reset_by_strategy);
   describe('#remove', remove);
   //= =================================
   function add() {
@@ -118,6 +119,16 @@ describe('Watchlist module', function () {
           expect(val).to.be.empty;
           done();
         });
+      });
+    });
+  }
+
+  function reset_by_strategy() {
+    it('should reset the signal status  of watchlist for the given strategy_id', function (done) {
+      seneca.act('role:watchlist,cmd:reset_by_strategy', mock_dt, function (err, val) {
+        if (err) done(err);
+        default_api_test(err, val);
+        done();
       });
     });
   }
