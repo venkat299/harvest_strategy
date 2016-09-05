@@ -170,12 +170,8 @@ describe('Strategy:fifty_2_wk', function () {
       }, function (err, val) {
         if (err) done(err);
         expect(val.cb_msg).to.match(/no_possible_routing/);
-        expect(val.cb_msg_obj).to.be.an('object');
         expect(val.cb_msg_obj.transaction_type).to.be.null;
-        expect(val.cb_msg_obj.tradingsymbol).to.be.a('string');
-        expect(val.cb_msg_obj.strategy_id).to.be.a('string');
-        expect(val.cb_msg_obj.track_id).to.be.a('string');
-        expect(val.cb_msg_obj.ltp).to.be.a('number');
+        common_test(err, val);
         default_api_test(err, val);
         done();
       });
@@ -189,12 +185,8 @@ describe('Strategy:fifty_2_wk', function () {
       }, function (err, val) {
         if (err) done(err);
         expect(val.cb_msg).to.match(/role:evaluator,cmd:evaluate/);
-        expect(val.cb_msg_obj).to.be.an('object');
         expect(val.cb_msg_obj.transaction_type).to.match(/BUY/);
-        expect(val.cb_msg_obj.tradingsymbol).to.be.a('string');
-        expect(val.cb_msg_obj.strategy_id).to.be.a('string');
-        expect(val.cb_msg_obj.track_id).to.be.a('string');
-        expect(val.cb_msg_obj.ltp).to.be.a('number');
+        common_test(err, val);
         default_api_test(err, val);
         done();
       });
@@ -207,12 +199,8 @@ describe('Strategy:fifty_2_wk', function () {
       }, function (err, val) {
         if (err) done(err);
         expect(val.cb_msg).to.match(/no_possible_routing/);
-        expect(val.cb_msg_obj).to.be.an('object');
         expect(val.cb_msg_obj.transaction_type).to.be.null;
-        expect(val.cb_msg_obj.tradingsymbol).to.be.a('string');
-        expect(val.cb_msg_obj.strategy_id).to.be.a('string');
-        expect(val.cb_msg_obj.track_id).to.be.a('string');
-        expect(val.cb_msg_obj.ltp).to.be.a('number');
+        common_test(err, val);
         default_api_test(err, val);
         done();
       });
@@ -225,12 +213,8 @@ describe('Strategy:fifty_2_wk', function () {
       }, function (err, val) {
         if (err) done(err);
         expect(val.cb_msg).to.match(/no_possible_routing/);
-        expect(val.cb_msg_obj).to.be.an('object');
         expect(val.cb_msg_obj.transaction_type).to.be.null;
-        expect(val.cb_msg_obj.tradingsymbol).to.be.a('string');
-        expect(val.cb_msg_obj.strategy_id).to.be.a('string');
-        expect(val.cb_msg_obj.track_id).to.be.a('string');
-        expect(val.cb_msg_obj.ltp).to.be.a('number');
+        common_test(err, val);
         default_api_test(err, val);
         done();
       });
@@ -258,12 +242,8 @@ describe('Strategy:fifty_2_wk', function () {
       }, function (err, val) {
         if (err) done(err);
         expect(val.cb_msg).to.match(/no_possible_routing/);
-        expect(val.cb_msg_obj).to.be.an('object');
         expect(val.cb_msg_obj.transaction_type).to.be.null;
-        expect(val.cb_msg_obj.tradingsymbol).to.be.a('string');
-        expect(val.cb_msg_obj.strategy_id).to.be.a('string');
-        expect(val.cb_msg_obj.track_id).to.be.a('string');
-        expect(val.cb_msg_obj.ltp).to.be.a('number');
+        common_test(err, val);
         default_api_test(err, val);
         done();
       });
@@ -277,12 +257,8 @@ describe('Strategy:fifty_2_wk', function () {
       }, function (err, val) {
         if (err) done(err);
         expect(val.cb_msg).to.match(/role:evaluator,cmd:evaluate/);
-        expect(val.cb_msg_obj).to.be.an('object');
         expect(val.cb_msg_obj.transaction_type).to.match(/SELL/);
-        expect(val.cb_msg_obj.tradingsymbol).to.be.a('string');
-        expect(val.cb_msg_obj.strategy_id).to.be.a('string');
-        expect(val.cb_msg_obj.track_id).to.be.a('string');
-        expect(val.cb_msg_obj.ltp).to.be.a('number');
+        common_test(err, val);
         default_api_test(err, val);
         done();
       });
@@ -295,12 +271,8 @@ describe('Strategy:fifty_2_wk', function () {
       }, function (err, val) {
         if (err) done(err);
         expect(val.cb_msg).to.match(/no_possible_routing/);
-        expect(val.cb_msg_obj).to.be.an('object');
         expect(val.cb_msg_obj.transaction_type).to.be.null;
-        expect(val.cb_msg_obj.tradingsymbol).to.be.a('string');
-        expect(val.cb_msg_obj.strategy_id).to.be.a('string');
-        expect(val.cb_msg_obj.track_id).to.be.a('string');
-        expect(val.cb_msg_obj.ltp).to.be.a('number');
+        common_test(err, val);
         default_api_test(err, val);
         done();
       });
@@ -313,12 +285,8 @@ describe('Strategy:fifty_2_wk', function () {
       }, function (err, val) {
         if (err) done(err);
         expect(val.cb_msg).to.match(/no_possible_routing/);
-        expect(val.cb_msg_obj).to.be.an('object');
         expect(val.cb_msg_obj.transaction_type).to.be.null;
-        expect(val.cb_msg_obj.tradingsymbol).to.be.a('string');
-        expect(val.cb_msg_obj.strategy_id).to.be.a('string');
-        expect(val.cb_msg_obj.track_id).to.be.a('string');
-        expect(val.cb_msg_obj.ltp).to.be.a('number');
+        common_test(err, val);
         default_api_test(err, val);
         done();
       });
@@ -358,6 +326,14 @@ const default_api_test = function (err, val, cb) {
   expect(val.curr_track_id).to.exist;
   expect(val.prev_track_id).to.have.property;
 };
+
+const common_test = function (err, val, cb) {
+  expect(val.cb_msg_obj).to.be.an('object');
+  expect(val.cb_msg_obj.tradingsymbol).to.be.a('string');
+  expect(val.cb_msg_obj.strategy_id).to.be.a('string');
+  expect(val.cb_msg_obj.track_id).to.be.a('string');
+  expect(val.cb_msg_obj.ltp).to.be.a('number');
+}
 
 function intialize(done) {
   intialize_server.get_server(function (options) {
